@@ -25,3 +25,4 @@ local.properties
 /.idea/vcs.xml
 /.idea/deploymentTargetSelector.xml
 /.idea/.name
+/.idea/deviceManager.xml
