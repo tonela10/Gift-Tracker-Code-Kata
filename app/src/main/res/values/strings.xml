@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Gift Tracker</string>
+    <string name="item_purchased">Purchased</string>
+    <string name="add_gift">Add gift</string>
+    <string name="gift_tracker_tab">Gift Tracker</string>
+    <string name="summary_tab">Summary</string>
 </resources>
