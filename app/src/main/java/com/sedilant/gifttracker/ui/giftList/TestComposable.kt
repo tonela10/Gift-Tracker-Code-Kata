@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +65,15 @@ private fun Test(
     val verticalBoxSlideProgress = remember { Animatable(0f) }
     val verticalBoxAlpha = remember { Animatable(0f) }
 
+    // second vertical ribbon animation
+    val verticalBoxSlideProgress2 = remember { Animatable(0f) }
+    val verticalBoxAlpha2 = remember { Animatable(0f) }
+
+    // third vertical ribbon animation
+    val verticalBoxSlideProgress3 = remember { Animatable(0f) }
+    val verticalBoxAlpha3 = remember { Animatable(0f) }
+
+
     // second cinta animation
     val horizontalBoxSlideProgress = remember { Animatable(0f) }
     val horizontalBoxAlpha = remember { Animatable(0f) }
@@ -80,6 +90,10 @@ private fun Test(
             redBoxAlpha.snapTo(1f)
             verticalBoxSlideProgress.snapTo(0f)
             verticalBoxAlpha.snapTo(1f)
+            verticalBoxSlideProgress2.snapTo(0f)
+            verticalBoxAlpha2.snapTo(1f)
+            verticalBoxSlideProgress3.snapTo(0f)
+            verticalBoxAlpha3.snapTo(1f)
             horizontalBoxSlideProgress.snapTo(0f)
             horizontalBoxAlpha.snapTo(1f)
             ribbonAlpha.snapTo(0f)
@@ -91,6 +105,14 @@ private fun Test(
                 animationSpec = tween(durationMillis = 200, easing = EaseIn)
             )
             verticalBoxSlideProgress.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 200, easing = EaseIn)
+            )
+            verticalBoxSlideProgress2.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 200, easing = EaseIn)
+            )
+            verticalBoxSlideProgress3.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(durationMillis = 200, easing = EaseIn)
             )
@@ -122,6 +144,18 @@ private fun Test(
             }
             launch {
                 verticalBoxAlpha.animateTo(
+                    targetValue = 0f,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            }
+            launch {
+                verticalBoxAlpha2.animateTo(
+                    targetValue = 0f,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            }
+            launch {
+                verticalBoxAlpha3.animateTo(
                     targetValue = 0f,
                     animationSpec = tween(durationMillis = 500)
                 )
@@ -237,23 +271,69 @@ private fun Test(
                             translationX = -size.width * (1f - redBoxSlideProgress.value)
                             this.alpha = redBoxAlpha.value
                         }
-                        .background(Color.Red.copy(alpha = 0.7f))
+                        .background(Color.Red.copy(alpha = 0.9f))
                 )
             }
 
 
-            // Diagonal ribbon (rotated vertical ribbon)
+            // Diagonal ribbon (rotated vertical ribbon) 1
             if (verticalBoxSlideProgress.value > 0f || verticalBoxAlpha.value > 0f) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.Center)
+                        .align(Alignment.TopCenter) // Change alignment to TopStart
                         .width(16.dp)
                         .fillMaxHeight()
                         .graphicsLayer {
-                            translationX = size.width * 6f
-                            translationY = -size.height * (1f - verticalBoxSlideProgress.value)
-//                            rotationZ = -45f // Rotate 45 degrees for diagonal
+                            translationX = size.width
+                            translationY = -15f
+                            scaleY = verticalBoxSlideProgress.value * 1.5f
+                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            rotationZ = -40f
                             this.alpha = verticalBoxAlpha.value
+                        }
+                        .background(ChartYellow)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black
+                        )
+                )
+            }
+            // Diagonal ribbon (rotated vertical ribbon) 2
+            if (verticalBoxSlideProgress2.value > 0f || verticalBoxAlpha2.value > 0f) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter) // Change alignment to TopStart
+                        .width(16.dp)
+                        .fillMaxHeight()
+                        .graphicsLayer {
+                            translationX = size.width * 3f
+                            translationY = -15f
+                            scaleY = verticalBoxSlideProgress2.value * 1.5f
+                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            rotationZ = -40f
+                            this.alpha = verticalBoxAlpha2.value
+                        }
+                        .background(ChartYellow)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black
+                        )
+                )
+            }
+            // Diagonal ribbon (rotated vertical ribbon) 3
+            if (verticalBoxSlideProgress3.value > 0f || verticalBoxAlpha3.value > 0f) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter) // Change alignment to TopStart
+                        .width(16.dp)
+                        .fillMaxHeight()
+                        .graphicsLayer {
+                            translationX = size.width * 5f
+                            translationY = -15f
+                            scaleY = verticalBoxSlideProgress3.value * 1.5f
+                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            rotationZ = -40f
+                            this.alpha = verticalBoxAlpha3.value
                         }
                         .background(ChartYellow)
                         .border(
