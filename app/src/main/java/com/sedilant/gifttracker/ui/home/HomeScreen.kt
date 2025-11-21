@@ -48,7 +48,7 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Add new gift */ },
+                onClick = { onOpenDetails(null) },
                 containerColor = Color(0xFFB23A48)
             ) {
                 Icon(
