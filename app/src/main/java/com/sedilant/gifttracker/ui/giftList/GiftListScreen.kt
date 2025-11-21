@@ -55,8 +55,7 @@ import kotlinx.coroutines.delay
 public fun GiftListScreen(
     onOpenDetails: (String?) -> Unit
 ) {
-
-    // TODO move this list to a room or dataStore to persist it and be able to modify
+    // TODO create a viewModel to handle the ui
     val gifts = remember {
         listOf(
             Gift("Libro de Arte Moderno", "Ana", 25, false),
@@ -75,130 +74,13 @@ public fun GiftListScreen(
     ) {
         items(gifts) { gift ->
             GiftItem(
-                onClick = { onOpenDetails(gift.name) },
+                onSeeDetails = { onOpenDetails(gift.name) },
                 giftPrice = gift.price,
                 giftName = gift.name,
                 giftRecipient = gift.recipient,
-                isPurchased = gift.isPurchased
+                isPurchased = gift.isPurchased,
+                onCheckItem = {},
             )
-        }
-    }
-}
-
-@Composable
-fun GiftItem(
-    modifier: Modifier = Modifier,
-    giftPrice: Int,
-    giftName: String,
-    giftRecipient: String,
-    isPurchased: Boolean,
-    onClick: () -> Unit
-) {
-
-    var showAnimation by remember { mutableStateOf(false) }
-
-    LaunchedEffect(isPurchased) {
-        if (isPurchased) {
-            showAnimation = true
-            delay(600) // Duration for slide animation
-            delay(300) // Duration for fade out
-            showAnimation = false
-        }
-    }
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(16.dp))
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onClick() },
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFF5F5F5)
-            ),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Checkbox circle
-                Box(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .background(
-                            color = if (isPurchased) Color(0xFF4A7C59) else Color.White,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = if (isPurchased) Color(0xFF4A7C59) else Color(0xFFCCCCCC),
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (isPurchased) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = stringResource(R.string.item_purchased),
-                            tint = Color.White,
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                // Gift info
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = giftName,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = "Para: $giftRecipient",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                }
-
-                // Price
-                Text(
-                    text = "$giftPrice €",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black
-                )
-            }
-        }
-
-        AnimatedVisibility(
-            visible = showAnimation,
-            enter = slideInHorizontally(
-                initialOffsetX = { -it },
-                animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
-            ) + fadeIn(animationSpec = tween(durationMillis = 300)),
-            exit = fadeOut(animationSpec = tween(durationMillis = 300))
-        ) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .matchParentSize(),
-                color = RedPrimary
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {}
-            }
         }
     }
 }
