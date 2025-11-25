@@ -3,6 +3,7 @@ package com.sedilant.gifttracker.ui.giftList
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,9 +39,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sedilant.gifttracker.R
 import com.sedilant.gifttracker.ui.theme.ChartYellow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -362,21 +365,21 @@ private fun Test(
             }
 //
 //            // Center ribbon icon
-//            if (ribbonAlpha.value > 0f) {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.ribbon),
-//                    contentDescription = "Gift ribbon",
-//                    modifier = Modifier
-//                        .align(Alignment.Center)
-//                        .size(48.dp)
-//                        .graphicsLayer {
-//                            scaleX = ribbonScale.value
-//                            scaleY = ribbonScale.value
-//                            alpha = ribbonAlpha.value
-//                        },
-//                    tint = ChartYellow
-//                )
-//            }
+            if (ribbonAlpha.value > 0f) {
+                Image(
+                    painter = painterResource(id = R.drawable.ribbon_removebg_preview),
+                    contentDescription = "Gift ribbon",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(100.dp)
+                        .graphicsLayer {
+                            translationX = size.width
+                            scaleX = ribbonScale.value
+                            scaleY = ribbonScale.value
+                            alpha = ribbonAlpha.value
+                        },
+                )
+            }
         }
     }
 }
