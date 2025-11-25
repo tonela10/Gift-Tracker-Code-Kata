@@ -10,7 +10,7 @@ import com.sedilant.gifttracker.ui.home.HomeScreen
 
 // Define keys that will identify content
 data object HomeScreen
-data class GiftDetail(val id: String)
+data class GiftDetail(val id: String?)
 data object Summary
 
 @Composable
@@ -28,13 +28,16 @@ fun GiftTrackerApp() {
         entryProvider = entryProvider {
             entry<HomeScreen> {
                 // HomeScreen composable
-                HomeScreen(onOpenDetails = { id -> backStack.add(GiftDetail(id ?: "")) })
+                HomeScreen(onOpenDetails = { id -> backStack.add(GiftDetail(id)) })
             }
             entry<GiftDetail>(
                 metadata = mapOf("extraDataKey" to "extraDataValue")
             ) { key ->
                 // GiftDetailScreen composable
-                GiftDetailScreen(key.id)
+                GiftDetailScreen(
+                    key.id,
+                    onNavigateBack = { backStack.removeLastOrNull() }
+                )
             }
         }
 
