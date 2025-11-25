@@ -2,6 +2,8 @@ package com.sedilant.gifttracker.ui.giftList
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -125,18 +127,18 @@ private fun Test(
             )
 
             // Show ribbon icon with scale animation
-            launch {
+
                 ribbonAlpha.animateTo(
                     targetValue = 1f,
                     animationSpec = tween(durationMillis = 300)
                 )
-            }
+
             ribbonScale.animateTo(
                 targetValue = 1f,
-                animationSpec = tween(durationMillis = 300, easing = EaseIn)
+                animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)
             )
 
-            delay(500)
+            delay(1000)
 
             // Fade out (500ms)
             launch {
