@@ -129,7 +129,7 @@ fun GiftItem(
                 .fillMaxWidth()
                 .clickable { onSeeDetails() },
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFF5F5F5)
+                containerColor = Color(0xFFDCD2D2)
             ),
             shape = RoundedCornerShape(16.dp)
         ) {

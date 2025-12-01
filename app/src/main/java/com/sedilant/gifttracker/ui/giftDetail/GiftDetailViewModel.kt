@@ -1,13 +1,14 @@
 package com.sedilant.gifttracker.ui.giftDetail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 /**
  * Represents the UI state for the GiftDetailScreen.
@@ -20,12 +21,10 @@ data class GiftDetailUiState(
     val isEditMode: Boolean = false
 )
 
-@HiltViewModel
-class GiftDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+@HiltViewModel(assistedFactory = GiftDetailViewModelFactory::class)
+class GiftDetailViewModel @AssistedInject constructor(
+    @Assisted private val itemId: String?,
 ) : ViewModel() {
-
-    private val itemId: String? = savedStateHandle["itemId"]
 
     private val _uiState = MutableStateFlow(GiftDetailUiState())
     val uiState: StateFlow<GiftDetailUiState> = _uiState.asStateFlow()
@@ -65,4 +64,31 @@ class GiftDetailViewModel @Inject constructor(
         // to your repository or database.
         toggleEditMode()
     }
+
+    /**
+     * Updates the person's name in the UI state.
+     */
+    fun onPersonChange(newPerson: String) {
+        _uiState.update { it.copy(person = newPerson) }
+    }
+
+    /**
+     * Updates the gift's name in the UI state.
+     */
+    fun onGiftChange(newGift: String) {
+        _uiState.update { it.copy(gift = newGift) }
+    }
+
+    /**
+     * Updates the price in the UI state.
+     */
+    fun onPriceChange(newPrice: String) {
+        // You could add input validation here if needed
+        _uiState.update { it.copy(price = newPrice) }
+    }
+}
+
+@AssistedFactory
+interface GiftDetailViewModelFactory {
+    fun create(itemId: String?): GiftDetailViewModel
 }
