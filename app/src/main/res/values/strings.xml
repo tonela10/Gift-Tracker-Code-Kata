@@ -4,4 +4,12 @@
     <string name="add_gift">Add gift</string>
     <string name="gift_tracker_tab">Gift Tracker</string>
     <string name="summary_tab">Summary</string>
+    <string name="person_label">Persona</string>
+    <string name="gift_label">Regalo</string>
+    <string name="price_label">Precio en €</string>
+    <string name="gift_detail_title">Detalle del Regalo</string>
+    <string name="exit_edit_mode_content_description">Salir de edición</string>
+    <string name="back_content_description">Volver</string>
+    <string name="save_button">Guardar</string>
+    <string name="edit_button">Editar</string>
 </resources>
