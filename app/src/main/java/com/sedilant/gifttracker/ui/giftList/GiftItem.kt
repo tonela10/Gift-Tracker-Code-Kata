@@ -2,7 +2,10 @@ package com.sedilant.gifttracker.ui.giftList
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,13 +30,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -56,24 +63,56 @@ fun GiftItem(
     val redBoxSlideProgress = remember { Animatable(0f) }
     val redBoxAlpha = remember { Animatable(1f) }
 
-    // first ribbon animation
+    // first cinta animation
     val verticalBoxSlideProgress = remember { Animatable(0f) }
     val verticalBoxAlpha = remember { Animatable(0f) }
 
-    // second ribbon animation
+    // second vertical ribbon animation
+    val verticalBoxSlideProgress2 = remember { Animatable(0f) }
+    val verticalBoxAlpha2 = remember { Animatable(0f) }
+
+    // third vertical ribbon animation
+    val verticalBoxSlideProgress3 = remember { Animatable(0f) }
+    val verticalBoxAlpha3 = remember { Animatable(0f) }
+
+
+    // second cinta animation
     val horizontalBoxSlideProgress = remember { Animatable(0f) }
     val horizontalBoxAlpha = remember { Animatable(0f) }
 
+    // ribbon icon animation
+    val ribbonAlpha = remember { Animatable(0f) }
+    val ribbonScale = remember { Animatable(0f) }
+
+    var isFirstComposition by remember { mutableStateOf(true) }
+
     // Animation sequence
     LaunchedEffect(isPurchased) {
+        if (isFirstComposition) {
+            isFirstComposition = false
+            if (!isPurchased) {
+                // If unchecked on first composition, immediately hide animations
+                redBoxSlideProgress.snapTo(0f)
+                redBoxAlpha.snapTo(0f)
+                verticalBoxAlpha.snapTo(0f)
+            }
+            return@LaunchedEffect
+        }
+
         if (isPurchased) {
             // Reset animations
             redBoxSlideProgress.snapTo(0f)
             redBoxAlpha.snapTo(1f)
             verticalBoxSlideProgress.snapTo(0f)
             verticalBoxAlpha.snapTo(1f)
+            verticalBoxSlideProgress2.snapTo(0f)
+            verticalBoxAlpha2.snapTo(1f)
+            verticalBoxSlideProgress3.snapTo(0f)
+            verticalBoxAlpha3.snapTo(1f)
             horizontalBoxSlideProgress.snapTo(0f)
             horizontalBoxAlpha.snapTo(1f)
+            ribbonAlpha.snapTo(0f)
+            ribbonScale.snapTo(0f)
 
             // Slide in from left (600ms)
             redBoxSlideProgress.animateTo(
@@ -84,12 +123,35 @@ fun GiftItem(
                 targetValue = 1f,
                 animationSpec = tween(durationMillis = 200, easing = EaseIn)
             )
+            verticalBoxSlideProgress2.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 200, easing = EaseIn)
+            )
+            verticalBoxSlideProgress3.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 200, easing = EaseIn)
+            )
             horizontalBoxSlideProgress.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(durationMillis = 200, easing = EaseIn)
             )
 
-            delay(500)
+            // Show ribbon icon with scale animation
+
+            ribbonAlpha.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 300)
+            )
+
+            ribbonScale.animateTo(
+                targetValue = 1f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
+
+            delay(1000)
 
             // Fade out (500ms)
             launch {
@@ -105,7 +167,25 @@ fun GiftItem(
                 )
             }
             launch {
+                verticalBoxAlpha2.animateTo(
+                    targetValue = 0f,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            }
+            launch {
+                verticalBoxAlpha3.animateTo(
+                    targetValue = 0f,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            }
+            launch {
                 horizontalBoxAlpha.animateTo(
+                    targetValue = 0f,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            }
+            launch {
+                ribbonAlpha.animateTo(
                     targetValue = 0f,
                     animationSpec = tween(durationMillis = 500)
                 )
@@ -116,6 +196,9 @@ fun GiftItem(
             redBoxSlideProgress.snapTo(0f)
             redBoxAlpha.snapTo(0f)
             verticalBoxAlpha.snapTo(0f)
+            horizontalBoxAlpha.snapTo(0f)
+            ribbonAlpha.snapTo(0f)
+            ribbonScale.snapTo(0f)
         }
     }
 
@@ -192,8 +275,8 @@ fun GiftItem(
                     color = Color.Black
                 )
             }
-            // Animated overlay using Animatable - constrain all overlays to card size
         }
+        // Animated overlay using Animatable - constrain all overlays to card size
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -235,6 +318,50 @@ fun GiftItem(
                         )
                 )
             }
+            // Diagonal ribbon (rotated vertical ribbon) 2
+            if (verticalBoxSlideProgress2.value > 0f || verticalBoxAlpha2.value > 0f) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter) // Change alignment to TopStart
+                        .width(16.dp)
+                        .fillMaxHeight()
+                        .graphicsLayer {
+                            translationX = size.width * 3f
+                            translationY = -15f
+                            scaleY = verticalBoxSlideProgress2.value * 1.5f
+                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            rotationZ = -40f
+                            this.alpha = verticalBoxAlpha2.value
+                        }
+                        .background(ChartYellow)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black
+                        )
+                )
+            }
+            // Diagonal ribbon (rotated vertical ribbon) 3
+            if (verticalBoxSlideProgress3.value > 0f || verticalBoxAlpha3.value > 0f) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter) // Change alignment to TopStart
+                        .width(16.dp)
+                        .fillMaxHeight()
+                        .graphicsLayer {
+                            translationX = size.width * 5f
+                            translationY = -15f
+                            scaleY = verticalBoxSlideProgress3.value * 1.5f
+                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            rotationZ = -40f
+                            this.alpha = verticalBoxAlpha3.value
+                        }
+                        .background(ChartYellow)
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black
+                        )
+                )
+            }
             // Horizontal white ribbon
             if (horizontalBoxSlideProgress.value > 0f || horizontalBoxAlpha.value > 0f) {
                 Box(
@@ -251,6 +378,23 @@ fun GiftItem(
                             width = 1.dp,
                             color = Color.Black
                         )
+                )
+            }
+//
+//            // Center ribbon icon
+            if (ribbonAlpha.value > 0f) {
+                Image(
+                    painter = painterResource(id = R.drawable.ribbon_removebg_preview),
+                    contentDescription = "Gift ribbon",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(100.dp)
+                        .graphicsLayer {
+                            translationX = size.width
+                            scaleX = ribbonScale.value
+                            scaleY = ribbonScale.value
+                            alpha = ribbonAlpha.value
+                        },
                 )
             }
         }
