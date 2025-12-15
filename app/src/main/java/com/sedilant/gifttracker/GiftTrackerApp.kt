@@ -1,9 +1,11 @@
 package com.sedilant.gifttracker
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.sedilant.gifttracker.ui.giftDetail.GiftDetailScreen
 import com.sedilant.gifttracker.ui.home.HomeScreen
@@ -28,13 +30,17 @@ fun GiftTrackerApp() {
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator()
+        ),
         entryProvider = entryProvider {
             entry<HomeScreen> {
                 // HomeScreen composable
                 HomeScreen(onOpenDetails = { id -> backStack.add(GiftDetail(id)) })
             }
             entry<GiftDetail>(
-                metadata = mapOf("extraDataKey" to "extraDataValue")
+//                metadata = mapOf("extraDataKey" to "extraDataValue")
             ) { key ->
                 // GiftDetailScreen composable
                 GiftDetailScreen(
