@@ -109,7 +109,8 @@ fun HomeScreen(
 
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                beyondViewportPageCount = 1
             ) { page ->
                 when (page) {
                     0 -> GiftListScreen(onOpenDetails = onOpenDetails)
