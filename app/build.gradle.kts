@@ -53,6 +53,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.material.icons.extended)
 
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.room.compiler)
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
