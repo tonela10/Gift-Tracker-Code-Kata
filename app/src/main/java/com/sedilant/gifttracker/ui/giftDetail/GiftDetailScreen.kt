@@ -1,12 +1,24 @@
 package com.sedilant.gifttracker.ui.giftDetail
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -22,8 +34,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -123,13 +137,20 @@ private fun DetailsTopBar(
     TopAppBar(
         modifier = Modifier.background(BackgroundLight),
         title = {
-            Text(
-                stringResource(id = R.string.gift_detail_title),
-                fontWeight = FontWeight.Bold
-            )
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = if (!isEditMode) stringResource(id = R.string.gift_detail_title) else stringResource(
+                        id = R.string.editing
+                    ),
+                    fontWeight = FontWeight.Bold
+                )
+                if (isEditMode) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    DotAnimation()
+                }
+            }
         },
         navigationIcon = {
-            // TODO change the animation
             Crossfade(
                 targetState = isEditMode,
                 label = "nav-icon-animation"
@@ -160,7 +181,6 @@ private fun DetailsBottomBar(
     onToggleEditMode: () -> Unit,
     onSaveGiftDetails: () -> Unit
 ) {
-    // TODO change the animation for another cool one
     Crossfade(
         targetState = isEditMode,
         label = "bottom-bar-animation"
@@ -187,6 +207,47 @@ private fun DetailsBottomBar(
                 modifier = Modifier.padding(8.dp),
                 fontSize = 16.sp
             )
+        }
+    }
+}
+
+@Composable
+fun DotAnimation() {
+    val infiniteTransition = rememberInfiniteTransition()
+
+    @Composable
+    fun Dot(alpha: Float) {
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .graphicsLayer {
+                    this.alpha = alpha
+                }
+                .background(
+                    color = Color.White,
+                    shape = CircleShape
+                )
+        )
+    }
+
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        val alphas = (0..2).map {
+            infiniteTransition.animateFloat(
+                initialValue = 0f,
+                targetValue = 1f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(
+                        durationMillis = 1000,
+                        delayMillis = 200,
+                        easing = LinearEasing
+                    ),
+                    repeatMode = RepeatMode.Restart
+                )
+            )
+        }
+        alphas.forEach {
+            
+            Dot(alpha = it.value)
         }
     }
 }

@@ -1,17 +1,16 @@
 package com.sedilant.gifttracker
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.sedilant.gifttracker.ui.giftDetail.GiftDetailScreen
 import com.sedilant.gifttracker.ui.home.HomeScreen
 
 // Define keys that will identify content
-data object HomeScreen
-data class GiftDetail(val id: String?)
-data object Summary
+data object HomeScreen : NavKey
+data class GiftDetail(val id: String?) : NavKey
 
 @Composable
 fun GiftTrackerApp() {
@@ -21,7 +20,7 @@ fun GiftTrackerApp() {
     // pass the interface to the composable.
 
     // Create a back stack, specifying the key the app should start with
-    val backStack = remember { mutableStateListOf<Any>(HomeScreen) }
+    val backStack = rememberNavBackStack(HomeScreen)
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },

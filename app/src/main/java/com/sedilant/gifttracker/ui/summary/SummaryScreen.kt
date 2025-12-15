@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -19,17 +17,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +46,6 @@ public fun SummaryScreen() {
         ) {
             item(span = { GridItemSpan(if (maxLineSpan == 1) 1 else if (maxLineSpan == 2) 1 else 1) }) {
                 SummaryInfoCard(
-                    modifier = Modifier.fillMaxWidth(),
                     icon = Icons.Default.ShoppingCart,
                     title = "Regalos totales",
                     backgroundColor = Color(0xFFFFE4E1),
@@ -73,7 +67,6 @@ public fun SummaryScreen() {
             }
             item(span = { GridItemSpan(if (maxLineSpan == 1) 1 else if (maxLineSpan == 2) 1 else 1) }) {
                 SummaryInfoCard(
-                    modifier = Modifier.fillMaxWidth(),
                     icon = Icons.Default.CheckCircle,
                     title = "Comprados",
                     backgroundColor = Color(0xFFE8F5E9),
@@ -112,7 +105,6 @@ public fun SummaryScreen() {
             }
             item(span = { GridItemSpan(if (maxLineSpan == 1 || maxLineSpan == 2) maxLineSpan else 1) }) {
                 SummaryInfoCard(
-                    modifier = Modifier.fillMaxWidth(),
                     icon = Icons.Default.CheckCircle,
                     title = "Gasto total estimado",
                     backgroundColor = Color(0xFFFFF9C4),
@@ -131,71 +123,10 @@ public fun SummaryScreen() {
     }
 }
 
-@Composable
-private fun SummaryInfoCard(
-    icon: ImageVector,
-    title: String,
-    content: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.Black,
-    contentColor: Color = Color.Gray,
-) {
-    Surface(
-        modifier = modifier
-            .heightIn(min = 140.dp, max = 180.dp),
-        color = backgroundColor,
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = contentColor,
-                modifier = Modifier.size(48.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = contentColor
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Custom content passed by the developer
-            content()
-        }
-    }
-}
 
 @Preview(widthDp = 1000)
 @Preview
 @Composable
 private fun PreviewSummaryScreen() {
     SummaryScreen()
-}
-
-@Preview
-@Composable
-private fun PreviewSummaryInfoCard() {
-    SummaryInfoCard(
-        icon = Icons.Default.CheckCircle,
-        title = "Comprados",
-        content = {
-            Text(
-                text = "8 / 12",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-        }
-    )
 }

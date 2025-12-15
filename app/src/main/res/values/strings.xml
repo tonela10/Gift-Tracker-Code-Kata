@@ -12,4 +12,5 @@
     <string name="back_content_description">Volver</string>
     <string name="save_button">Guardar</string>
     <string name="edit_button">Editar</string>
+    <string name="editing">Editing</string>
 </resources>
