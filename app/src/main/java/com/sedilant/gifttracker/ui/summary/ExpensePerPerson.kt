@@ -31,6 +31,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sedilant.gifttracker.data.local.entity.GiftEntity
+import kotlin.random.Random
+import kotlin.times
 
 @Composable
 fun ExpensePerPerson(
@@ -44,22 +46,29 @@ fun ExpensePerPerson(
         }
         .sortedByDescending { it.second }
 
-
     val totalExpense = expensePerPerson.sumOf { it.second }
-    val colors = listOf(
-        Color(0xFFD32F2F),
-        Color(0xFF1976D2),
-        Color(0xFFFFB300),
-        Color(0xFF7CB342),
-        Color(0xFF00897B)
-    )
+
+
+    fun randomColor(): Color {
+        val rnd = Random.Default
+        val hue = rnd.nextFloat() * 360f
+        val saturation = 0.35f
+        val value = 0.98f
+        val hsv = floatArrayOf(hue, saturation, value)
+        val argb = android.graphics.Color.HSVToColor(hsv)
+        return Color(argb)
+    }
+
+    // Generate a color per slice using randomColor()
+    val sliceColors: List<Color> = expensePerPerson.map { randomColor() }
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(12.dp),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onSecondary)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -93,40 +102,37 @@ fun ExpensePerPerson(
                     var startAngle = -90f
 
                     expensePerPerson.forEachIndexed { index, (_, amount) ->
-                        expensePerPerson.forEachIndexed { index, (_, amount) ->
-                            val sweepAngle =
-                                if (totalExpense > 0.0) ((amount / totalExpense) * 360f).toFloat() else 0f
-                            drawArc(
-                                color = colors[index % colors.size],
-                                startAngle = startAngle,
-                                sweepAngle = sweepAngle,
-                                useCenter = false,
-                                topLeft = Offset(center.x - radius, center.y - radius),
-                                size = Size(radius * 2, radius * 2),
-                                style = Stroke(width = 24.dp.toPx())
-                            )
-                            startAngle += sweepAngle
-                        }
+                        val sweepAngle =
+                            if (totalExpense > 0.0) ((amount / totalExpense) * 360f).toFloat() else 0f
+                        drawArc(
+                            color = sliceColors[index],
+                            startAngle = startAngle,
+                            sweepAngle = sweepAngle,
+                            useCenter = false,
+                            topLeft = Offset(center.x - radius, center.y - radius),
+                            size = Size(radius * 2, radius * 2),
+                            style = Stroke(width = 24.dp.toPx())
+                        )
+                        startAngle += sweepAngle
+                    }
 
-
-                        // Center text
-                        drawContext.canvas.nativeCanvas.apply {
-                            val paint = android.graphics.Paint().apply {
-                                color = android.graphics.Color.BLACK
-                                textSize = 36.dp.toPx()
-                                typeface = android.graphics.Typeface.create(
-                                    android.graphics.Typeface.DEFAULT,
-                                    android.graphics.Typeface.BOLD
-                                )
-                                textAlign = android.graphics.Paint.Align.CENTER
-                            }
-                            drawText(
-                                "€$totalExpense",
-                                center.x,
-                                center.y + (paint.textSize / 3),
-                                paint
+                    // Center text
+                    drawContext.canvas.nativeCanvas.apply {
+                        val paint = android.graphics.Paint().apply {
+                            color = android.graphics.Color.BLACK
+                            textSize = 36.dp.toPx()
+                            typeface = android.graphics.Typeface.create(
+                                android.graphics.Typeface.DEFAULT,
+                                android.graphics.Typeface.BOLD
                             )
+                            textAlign = android.graphics.Paint.Align.CENTER
                         }
+                        drawText(
+                            "€${totalExpense.toInt()}",
+                            center.x,
+                            center.y + (paint.textSize / 3),
+                            paint
+                        )
                     }
                 }
 
@@ -147,7 +153,7 @@ fun ExpensePerPerson(
                                 modifier = Modifier
                                     .size(12.dp)
                                     .background(
-                                        color = colors[index % colors.size],
+                                        color = sliceColors[index],
                                         shape = CircleShape
                                     )
                             )
@@ -161,10 +167,10 @@ fun ExpensePerPerson(
                                 )
                             }
                             Text(
-                                text = "€$amount",
+                                text = "€${amount.toInt()}",
                                 style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.Bold,
-                                color = colors[index % colors.size]
+                                color = sliceColors[index]
                             )
                         }
                     }

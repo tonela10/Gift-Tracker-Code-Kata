@@ -78,7 +78,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun GiftTrackerTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false, // isSystemInDarkTheme(), Commented to use always the same colors
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false, // Cambiado a false para usar colores personalizados
     content: @Composable () -> Unit
