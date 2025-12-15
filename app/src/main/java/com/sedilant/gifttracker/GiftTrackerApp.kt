@@ -7,9 +7,13 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.sedilant.gifttracker.ui.giftDetail.GiftDetailScreen
 import com.sedilant.gifttracker.ui.home.HomeScreen
+import kotlinx.serialization.Serializable
 
 // Define keys that will identify content
+@Serializable
 data object HomeScreen : NavKey
+
+@Serializable
 data class GiftDetail(val id: String?) : NavKey
 
 @Composable

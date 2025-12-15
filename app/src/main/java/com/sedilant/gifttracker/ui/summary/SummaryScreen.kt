@@ -21,6 +21,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,9 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @Composable
-public fun SummaryScreen() {
+public fun SummaryScreen(
+    viewModel: SummaryViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,13 +59,13 @@ public fun SummaryScreen() {
                     contentColor = Color(0xFFD32F2F),
                     content = {
                         Text(
-                            text = "12",
+                            text = "${uiState.totalGifts}",
                             style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black
                         )
                         Text(
-                            text = "para 5 personas",
+                            text = "para ${uiState.totalPeople} personas",
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray
                         )
@@ -79,19 +86,19 @@ public fun SummaryScreen() {
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    text = "8 / 12",
+                                    text = "${uiState.purchasedGifts} / ${uiState.totalGifts}",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = Color.Gray
                                 )
                                 Text(
-                                    text = "67%",
+                                    text = "${(uiState.purchasedPercentage * 100).toInt()}%",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = Color.Gray
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             LinearProgressIndicator(
-                                progress = { 0.67f },
+                                progress = { uiState.purchasedPercentage },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(8.dp)
@@ -111,7 +118,7 @@ public fun SummaryScreen() {
                     contentColor = Color(0xFFF9A825),
                     content = {
                         Text(
-                            text = "€358",
+                            text = "€${uiState.totalEstimatedCost}",
                             style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black

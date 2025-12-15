@@ -1,6 +1,9 @@
 package com.sedilant.gifttracker.ui.giftDetail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.sedilant.gifttracker.data.local.entity.GiftEntity
+import com.sedilant.gifttracker.data.repository.GiftRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -9,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 /**
  * Represents the UI state for the GiftDetailScreen.
@@ -18,12 +22,14 @@ data class GiftDetailUiState(
     val gift: String = "",
     val price: String = "",
     val isPurchased: Boolean = false,
-    val isEditMode: Boolean = false
+    val isEditMode: Boolean = false,
+    val giftId: Long? = null
 )
 
 @HiltViewModel(assistedFactory = GiftDetailViewModelFactory::class)
 class GiftDetailViewModel @AssistedInject constructor(
     @Assisted private val itemId: String?,
+    private val giftRepository: GiftRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GiftDetailUiState())
@@ -34,15 +40,26 @@ class GiftDetailViewModel @AssistedInject constructor(
             // Creating a new item, start in edit mode
             _uiState.update { it.copy(isEditMode = true) }
         } else {
-            // Loading an existing item, fetch details
-            // For now, using mock data as in the image
-            _uiState.update {
-                it.copy(
-                    person = "Carlos",
-                    gift = "Bufanda de lana",
-                    price = "30",
-                    isPurchased = true
-                )
+            // Loading an existing item, fetch details from database
+            loadGiftDetails(itemId.toLongOrNull())
+        }
+    }
+
+    private fun loadGiftDetails(giftId: Long?) {
+        if (giftId == null) return
+
+        viewModelScope.launch {
+            val gift = giftRepository.getGiftById(giftId)
+            gift?.let {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        giftId = it.id,
+                        person = it.person,
+                        gift = it.name,
+                        price = it.price.toString(),
+                        isPurchased = it.isPurchased
+                    )
+                }
             }
         }
     }
@@ -60,9 +77,29 @@ class GiftDetailViewModel @AssistedInject constructor(
      * Saves the gift details and exits edit mode.
      */
     fun saveGiftDetails() {
-        // Here you would implement the logic to save the data
-        // to your repository or database.
-        toggleEditMode()
+        viewModelScope.launch {
+            val currentState = _uiState.value
+            val priceValue = currentState.price.toIntOrNull() ?: 0
+
+            val giftEntity = GiftEntity(
+                id = currentState.giftId ?: 0,
+                name = currentState.gift,
+                person = currentState.person,
+                price = priceValue,
+                isPurchased = currentState.isPurchased
+            )
+
+            if (currentState.giftId == null) {
+                // Insert new gift
+                val newId = giftRepository.insertGift(giftEntity)
+                _uiState.update { it.copy(giftId = newId) }
+            } else {
+                // Update existing gift
+                giftRepository.updateGift(giftEntity)
+            }
+
+            toggleEditMode()
+        }
     }
 
     /**
@@ -83,8 +120,10 @@ class GiftDetailViewModel @AssistedInject constructor(
      * Updates the price in the UI state.
      */
     fun onPriceChange(newPrice: String) {
-        // You could add input validation here if needed
-        _uiState.update { it.copy(price = newPrice) }
+        // Only allow numeric input
+        if (newPrice.isEmpty() || newPrice.all { it.isDigit() }) {
+            _uiState.update { it.copy(price = newPrice) }
+        }
     }
 }
 

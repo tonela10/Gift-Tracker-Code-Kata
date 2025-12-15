@@ -46,10 +46,9 @@ public fun GiftListScreen(
 @Composable
 private fun GiftListScreenPreview() {
     GiftTrackerTheme {
-        // We can't use a Hilt ViewModel in previews easily, so we'll simulate the state
         val gifts = listOf(
-            Gift("Libro de Arte Moderno", "Ana", 25, false),
-            Gift("Bufanda de lana", "Carlos", 30, true)
+            Gift(0, "Libro de Arte Moderno", "Ana", 25, false),
+            Gift(1, "Bufanda de lana", "Carlos", 30, true)
         )
 
         LazyColumn(
@@ -74,6 +73,7 @@ private fun GiftListScreenPreview() {
 }
 
 data class Gift(
+    val id: Long = 0,
     val name: String,
     val recipient: String,
     val price: Int,

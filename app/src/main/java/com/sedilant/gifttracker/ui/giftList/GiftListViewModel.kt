@@ -2,6 +2,7 @@ package com.sedilant.gifttracker.ui.giftList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sedilant.gifttracker.data.repository.GiftRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,34 +16,37 @@ data class GiftListUiState(
 )
 
 @HiltViewModel
-class GiftListViewModel @Inject constructor() : ViewModel() {
+class GiftListViewModel @Inject constructor(
+    private val giftRepository: GiftRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GiftListUiState())
     val uiState: StateFlow<GiftListUiState> = _uiState.asStateFlow()
 
     init {
-        // TODO: Replace with your data source (e.g., a repository)
-        val initialGifts = listOf(
-            Gift("Libro de Arte Moderno", "Ana", 25, false),
-            Gift("Bufanda de lana", "Carlos", 30, true),
-            Gift("Auriculares Inalámbricos", "Mamá", 79, false),
-            Gift("Set de jardinería", "Abuela", 45, true)
-        )
-        _uiState.value = GiftListUiState(gifts = initialGifts)
+        loadGifts()
+    }
+
+    private fun loadGifts() {
+        viewModelScope.launch {
+            giftRepository.getAllGifts().collect { giftEntities ->
+                val gifts = giftEntities.map { entity ->
+                    Gift(
+                        id = entity.id,
+                        name = entity.name,
+                        recipient = entity.person,
+                        price = entity.price,
+                        isPurchased = entity.isPurchased
+                    )
+                }
+                _uiState.update { it.copy(gifts = gifts) }
+            }
+        }
     }
 
     fun onGiftChecked(gift: Gift) {
         viewModelScope.launch {
-            _uiState.update { currentState ->
-                val updatedGifts = currentState.gifts.map {
-                    if (it.name == gift.name) {
-                        it.copy(isPurchased = !it.isPurchased)
-                    } else {
-                        it
-                    }
-                }
-                currentState.copy(gifts = updatedGifts)
-            }
+            giftRepository.updatePurchasedStatus(gift.id, !gift.isPurchased)
         }
     }
 }
