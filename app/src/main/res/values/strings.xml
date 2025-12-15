@@ -13,4 +13,13 @@
     <string name="save_button">Save</string>
     <string name="edit_button">Edit</string>
     <string name="editing">Editing</string>
+
+    <string name="next_steps">Next Steps</string>
+    <string name="euro_symbol">€</string>
+    <string name="total_gifts">Total Gifts</string>
+    <string name="already_bought">Done</string>
+    <string name="total_estimated">Total estimated expenditure</string>
+    <string name="next_steps_title">Next Steps</string>
+
+
 </resources>

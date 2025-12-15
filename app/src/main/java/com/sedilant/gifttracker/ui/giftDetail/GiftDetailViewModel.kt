@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Locale.getDefault
 
 /**
  * Represents the UI state for the GiftDetailScreen.
@@ -83,7 +84,12 @@ class GiftDetailViewModel @AssistedInject constructor(
 
             val giftEntity = GiftEntity(
                 id = currentState.giftId ?: 0,
-                name = currentState.gift,
+                name = currentState.gift.replaceFirstChar
+                {
+                    if (it.isLowerCase()) it.titlecase(
+                        getDefault()
+                    ) else it.toString()
+                },
                 person = currentState.person,
                 price = priceValue.toFloat(),
                 isPurchased = currentState.isPurchased

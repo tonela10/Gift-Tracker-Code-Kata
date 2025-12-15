@@ -27,16 +27,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.sedilant.gifttracker.R
 
 @Composable
 public fun SummaryScreen(
     viewModel: SummaryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    SummaryScreenStateless(uiState = uiState)
+}
+
+@Composable
+public fun SummaryScreenStateless(
+    uiState: SummaryUiState
+) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Determine columns based on screen width
+    val columns = when {
+        screenWidth < 600.dp -> 2  // Compact: 2 columns
+        screenWidth < 840.dp -> 3  // Medium: 3 columns
+        else -> 3                  // Large: 3 columns
+    }
 
     Column(
         modifier = Modifier
@@ -46,15 +65,16 @@ public fun SummaryScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 150.dp),
+            columns = GridCells.Fixed(columns),
             contentPadding = PaddingValues(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item(span = { GridItemSpan(if (maxLineSpan == 1) 1 else if (maxLineSpan == 2) 1 else 1) }) {
+            // Total gifts card
+            item(span = { GridItemSpan(1) }) {
                 SummaryInfoCard(
                     icon = Icons.Default.ShoppingCart,
-                    title = "Regalos totales",
+                    title = stringResource(R.string.total_gifts),
                     backgroundColor = Color(0xFFFFE4E1),
                     contentColor = Color(0xFFD32F2F),
                     content = {
@@ -72,10 +92,12 @@ public fun SummaryScreen(
                     }
                 )
             }
-            item(span = { GridItemSpan(if (maxLineSpan == 1) 1 else if (maxLineSpan == 2) 1 else 1) }) {
+
+            // Purchased gifts card
+            item(span = { GridItemSpan(1) }) {
                 SummaryInfoCard(
                     icon = Icons.Default.CheckCircle,
-                    title = "Comprados",
+                    title = stringResource(R.string.already_bought),
                     backgroundColor = Color(0xFFE8F5E9),
                     contentColor = Color(0xFF2E7D32),
                     content = {
@@ -110,10 +132,12 @@ public fun SummaryScreen(
                     }
                 )
             }
-            item(span = { GridItemSpan(if (maxLineSpan == 1 || maxLineSpan == 2) maxLineSpan else 1) }) {
+
+            // Total estimated card - spans full row on compact (2), single cell on larger screens
+            item(span = { GridItemSpan(if (columns == 2) maxLineSpan else 1) }) {
                 SummaryInfoCard(
                     icon = Icons.Default.CheckCircle,
-                    title = "Gasto total estimado",
+                    title = stringResource(R.string.total_estimated),
                     backgroundColor = Color(0xFFFFF9C4),
                     contentColor = Color(0xFFF9A825),
                     content = {
@@ -126,17 +150,28 @@ public fun SummaryScreen(
                     }
                 )
             }
+
+            // Full-width sections
             item(span = { GridItemSpan(maxLineSpan) }) {
                 ExpensePerPerson(gifts = uiState.gifts)
+            }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                if (uiState.totalGifts - uiState.purchasedGifts > 0) {
+                    NextSteps(
+                        pendingGiftsList = uiState.gifts.filter { !it.isPurchased },
+                        onGiftClicked = { /* TODO: Navigate to gift detail */ }
+                    )
+                }
             }
         }
     }
 }
 
-
 @Preview(widthDp = 1000)
 @Preview
 @Composable
 private fun PreviewSummaryScreen() {
-    SummaryScreen()
+    SummaryScreenStateless(
+        uiState = SummaryUiState()
+    )
 }
