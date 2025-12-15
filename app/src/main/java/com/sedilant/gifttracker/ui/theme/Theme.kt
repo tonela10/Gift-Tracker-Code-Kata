@@ -9,35 +9,78 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = RedPrimary,
+    onPrimary = Color.White,
+    primaryContainer = RedSecondary,
+    onPrimaryContainer = Color.White,
+
+    secondary = ChartGreen,
+    onSecondary = Color.White,
+    secondaryContainer = GreenBackground,
+    onSecondaryContainer = ChartGreen,
+
+    tertiary = ChartYellow,
+    onTertiary = TextPrimary,
+    tertiaryContainer = YellowBackground,
+    onTertiaryContainer = ChartYellow,
+
+    background = Color(0xFF1C1B1F),
+    onBackground = Color(0xFFE6E1E5),
+
+    surface = Color(0xFF1C1B1F),
+    onSurface = Color(0xFFE6E1E5),
+    surfaceVariant = Color(0xFF49454F),
+    onSurfaceVariant = Color(0xFFCAC4D0),
+
+    error = Color(0xFFFFB4AB),
+    onError = Color(0xFF690005),
+
+    outline = DividerGray,
+    outlineVariant = Color(0xFF49454F)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = RedPrimary,
     onPrimary = Color.White,
+    primaryContainer = RedLight,
+    onPrimaryContainer = RedPrimary,
+
+    secondary = ChartGreen,
     onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondaryContainer = GreenBackground,
+    onSecondaryContainer = ChartGreen,
+
+    tertiary = ChartYellow,
+    onTertiary = TextPrimary,
+    tertiaryContainer = YellowBackground,
+    onTertiaryContainer = ChartYellow,
+
+    background = BackgroundLight,
+    onBackground = TextPrimary,
+
+    surface = SurfaceWhite,
+    onSurface = TextPrimary,
+    surfaceVariant = BackgroundLight,
+    onSurfaceVariant = TextSecondary,
+
+    error = Color(0xFFBA1A1A),
+    onError = Color.White,
+    errorContainer = Color(0xFFFFDAD6),
+    onErrorContainer = Color(0xFF410002),
+
+    outline = DividerGray,
+    outlineVariant = Color(0xFFCAC4D0)
 )
 
 @Composable
 fun GiftTrackerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Cambiado a false para usar colores personalizados
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -52,7 +95,7 @@ fun GiftTrackerTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography,
         content = content
     )
 }
