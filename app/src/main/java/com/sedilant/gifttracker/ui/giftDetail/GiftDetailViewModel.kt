@@ -120,8 +120,8 @@ class GiftDetailViewModel @AssistedInject constructor(
      * Updates the price in the UI state.
      */
     fun onPriceChange(newPrice: String) {
-        // Only allow numeric input
-        if (newPrice.isEmpty() || newPrice.all { it.isDigit() }) {
+        // Allow numeric input with up to 2 decimal places
+        if (newPrice.isEmpty() || newPrice.matches(Regex("^\\d+(\\.\\d{0,2})?$"))) {
             _uiState.update { it.copy(price = newPrice) }
         }
     }
