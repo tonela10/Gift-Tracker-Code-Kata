@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -20,15 +21,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.rounded.Euro
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -40,6 +44,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -92,7 +99,9 @@ public fun GiftDetailScreenStateless(
             DetailsBottomBar(
                 isEditMode = uiState.isEditMode,
                 onToggleEditMode = onToggleEditMode,
-                onSaveGiftDetails = onSaveGiftDetails
+                onSaveGiftDetails = {
+                    onSaveGiftDetails()
+                }
             )
         }
     ) { paddingValues ->
@@ -108,19 +117,32 @@ public fun GiftDetailScreenStateless(
                 label = stringResource(id = R.string.person_label),
                 value = uiState.person,
                 isEditMode = uiState.isEditMode,
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    imeAction = ImeAction.Next
+                ),
                 onValueChange = { onPersonChange(it) }
             )
             DetailItemCard(
                 label = stringResource(id = R.string.gift_label),
                 value = uiState.gift,
                 isEditMode = uiState.isEditMode,
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    imeAction = ImeAction.Next
+                ),
                 onValueChange = { onGiftChange(it) }
             )
             DetailItemCard(
                 label = stringResource(id = R.string.price_label),
                 value = uiState.price,
                 isEditMode = uiState.isEditMode,
-                onValueChange = { onPriceChange(it) }
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                onValueChange = { onPriceChange(it) },
+                trailingIcon = { Icon(imageVector = Icons.Rounded.Euro, contentDescription = null) }
             )
             StatusItemCard(isPurchased = uiState.isPurchased)
         }
@@ -134,45 +156,46 @@ private fun DetailsTopBar(
     onToggleEditMode: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    TopAppBar(
-        modifier = Modifier.background(BackgroundLight),
-        title = {
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(
-                    text = if (!isEditMode) stringResource(id = R.string.gift_detail_title) else stringResource(
-                        id = R.string.editing
-                    ),
-                    fontWeight = FontWeight.Bold
-                )
-                if (isEditMode) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                    DotAnimation()
-                }
-            }
-        },
-        navigationIcon = {
-            Crossfade(
-                targetState = isEditMode,
-                label = "nav-icon-animation"
-            ) { isEditMode ->
-                if (isEditMode) {
-                    IconButton(onClick = { onToggleEditMode() }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(id = R.string.exit_edit_mode_content_description)
-                        )
-                    }
-                } else {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.back_content_description)
-                        )
+    Surface(modifier = Modifier.background(BackgroundLight)) {
+        TopAppBar(
+            title = {
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        text = if (!isEditMode) stringResource(id = R.string.gift_detail_title) else stringResource(
+                            id = R.string.editing
+                        ),
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (isEditMode) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        DotAnimation()
                     }
                 }
+            },
+            navigationIcon = {
+                Crossfade(
+                    targetState = isEditMode,
+                    label = "nav-icon-animation"
+                ) { isEditMode ->
+                    if (isEditMode) {
+                        IconButton(onClick = { onToggleEditMode() }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(id = R.string.exit_edit_mode_content_description)
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = stringResource(id = R.string.back_content_description)
+                            )
+                        }
+                    }
+                }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable
@@ -181,6 +204,11 @@ private fun DetailsBottomBar(
     onToggleEditMode: () -> Unit,
     onSaveGiftDetails: () -> Unit
 ) {
+    val scale by animateFloatAsState(
+        targetValue = if (isEditMode) 1.05f else 1f,
+        label = "button-scale"
+    )
+
     Crossfade(
         targetState = isEditMode,
         label = "bottom-bar-animation"
@@ -194,12 +222,21 @@ private fun DetailsBottomBar(
             { onToggleEditMode() }
         }
 
+
         Button(
             onClick = onClickAction,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(24.dp)
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                },
             shape = RoundedCornerShape(50),
+            elevation = ButtonDefaults.buttonElevation(
+                defaultElevation = 4.dp,
+                pressedElevation = 8.dp
+            ),
             colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
         ) {
             Text(
@@ -246,7 +283,7 @@ fun DotAnimation() {
             )
         }
         alphas.forEach {
-            
+
             Dot(alpha = it.value)
         }
     }

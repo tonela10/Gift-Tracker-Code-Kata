@@ -17,6 +17,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -26,6 +27,7 @@ internal fun DetailItemCard(
     isEditMode: Boolean,
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -54,8 +56,20 @@ internal fun DetailItemCard(
                 color = Color.Black
             ),
             keyboardOptions = keyboardOptions,
-            keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(FocusDirection.Down)}),
-            enabled = isEditMode
+            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) }),
+            enabled = isEditMode,
+            trailingIcon = trailingIcon
         )
     }
+}
+
+@Preview
+@Composable
+private fun DetailItemCardPreview() {
+    DetailItemCard(
+        label = "Person",
+        value = "John Doe",
+        isEditMode = true,
+        onValueChange = {}
+    )
 }

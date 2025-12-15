@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sedilant.gifttracker.data.local.entity.GiftEntity
 import kotlin.random.Random
-import kotlin.times
 
 @Composable
 fun ExpensePerPerson(
@@ -64,8 +63,7 @@ fun ExpensePerPerson(
 
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(12.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onSecondary)

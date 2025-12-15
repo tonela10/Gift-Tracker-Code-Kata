@@ -27,6 +27,18 @@ class GiftListViewModel @Inject constructor(
         loadGifts()
     }
 
+    fun onGiftDelete(id: Long) {
+        viewModelScope.launch {
+            giftRepository.deleteGiftById(id)
+        }
+    }
+
+    fun onGiftChecked(gift: Gift) {
+        viewModelScope.launch {
+            giftRepository.updatePurchasedStatus(gift.id, !gift.isPurchased)
+        }
+    }
+
     private fun loadGifts() {
         viewModelScope.launch {
             giftRepository.getAllGifts().collect { giftEntities ->
@@ -41,12 +53,6 @@ class GiftListViewModel @Inject constructor(
                 }
                 _uiState.update { it.copy(gifts = gifts) }
             }
-        }
-    }
-
-    fun onGiftChecked(gift: Gift) {
-        viewModelScope.launch {
-            giftRepository.updatePurchasedStatus(gift.id, !gift.isPurchased)
         }
     }
 }

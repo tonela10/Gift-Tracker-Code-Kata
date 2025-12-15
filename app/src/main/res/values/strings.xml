@@ -5,12 +5,21 @@
     <string name="gift_tracker_tab">Gift Tracker</string>
     <string name="summary_tab">Summary</string>
     <string name="person_label">Persona</string>
-    <string name="gift_label">Regalo</string>
-    <string name="price_label">Precio en €</string>
-    <string name="gift_detail_title">Detalle del Regalo</string>
-    <string name="exit_edit_mode_content_description">Salir de edición</string>
-    <string name="back_content_description">Volver</string>
-    <string name="save_button">Guardar</string>
-    <string name="edit_button">Editar</string>
+    <string name="gift_label">Gift</string>
+    <string name="price_label">Price</string>
+    <string name="gift_detail_title">Gift Detail</string>
+    <string name="exit_edit_mode_content_description">Exit edit mode</string>
+    <string name="back_content_description">Back</string>
+    <string name="save_button">Save</string>
+    <string name="edit_button">Edit</string>
     <string name="editing">Editing</string>
+
+    <string name="next_steps">Next Steps</string>
+    <string name="euro_symbol">€</string>
+    <string name="total_gifts">Total Gifts</string>
+    <string name="already_bought">Done</string>
+    <string name="total_estimated">Total estimated expenditure</string>
+    <string name="next_steps_title">Next Steps</string>
+
+
 </resources>
