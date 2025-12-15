@@ -37,7 +37,7 @@ import com.sedilant.gifttracker.data.local.entity.GiftEntity
 internal fun NextSteps(
     modifier: Modifier = Modifier,
     pendingGiftsList: List<GiftEntity>,
-    onGiftClicked: () -> Unit
+    onGiftClicked: (Long) -> Unit
 ) {
     Card(
         modifier = modifier,
@@ -61,7 +61,7 @@ internal fun NextSteps(
                     giftName = gift.name,
                     person = gift.person,
                     price = gift.price.toString(),
-                    onGiftClicked = { onGiftClicked() }
+                    onGiftClicked = { onGiftClicked(gift.id) }
                 )
             }
         }

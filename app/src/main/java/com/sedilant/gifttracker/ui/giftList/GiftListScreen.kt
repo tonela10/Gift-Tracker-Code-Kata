@@ -6,9 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +26,28 @@ public fun GiftListScreen(
     viewModel: GiftListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var selectedGiftId by remember { mutableStateOf<Long?>(null) }
+
+    if (selectedGiftId != null) {
+        AlertDialog(
+            onDismissRequest = { selectedGiftId = null },
+            title = { Text(text = "WARNING") },
+            text = { Text("Are you sure you want to delete this gift?") },
+            confirmButton = {
+                androidx.compose.material3.Button(onClick = {
+                    selectedGiftId?.let { viewModel.onGiftDelete(it) }
+                    selectedGiftId = null
+                }) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                androidx.compose.material3.Button(onClick = { selectedGiftId = null }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -37,10 +64,12 @@ public fun GiftListScreen(
                 giftRecipient = gift.recipient,
                 isPurchased = gift.isPurchased,
                 onCheckItem = { viewModel.onGiftChecked(gift) },
+                onLongClick = { selectedGiftId = gift.id },
             )
         }
     }
 }
+
 
 @Preview
 @Composable
@@ -66,6 +95,7 @@ private fun GiftListScreenPreview() {
                     giftRecipient = gift.recipient,
                     isPurchased = gift.isPurchased,
                     onCheckItem = { },
+                    onLongClick = {}
                 )
             }
         }

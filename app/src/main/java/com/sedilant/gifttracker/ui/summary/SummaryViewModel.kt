@@ -33,6 +33,12 @@ class SummaryViewModel @Inject constructor(
         loadSummaryData()
     }
 
+    public fun updateGift(id: Long) {
+        viewModelScope.launch {
+            giftRepository.updatePurchasedStatus(id = id, isPurchased = true)
+        }
+    }
+
     private fun loadSummaryData() {
         viewModelScope.launch {
             giftRepository.getAllGifts().collect { giftEntities ->

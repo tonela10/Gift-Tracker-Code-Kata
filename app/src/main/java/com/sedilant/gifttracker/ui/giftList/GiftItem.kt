@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sedilant.gifttracker.R
 import com.sedilant.gifttracker.ui.theme.ChartYellow
@@ -58,6 +60,7 @@ fun GiftItem(
     isPurchased: Boolean,
     onSeeDetails: () -> Unit,
     onCheckItem: () -> Unit,
+    onLongClick: () -> Unit,
 ) {
     // first box animation
     val redBoxSlideProgress = remember { Animatable(0f) }
@@ -210,7 +213,10 @@ fun GiftItem(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onSeeDetails() },
+                .combinedClickable(
+                    onClick = onSeeDetails,
+                    onLongClick = onLongClick
+                ),
             colors = CardDefaults.cardColors(
                 containerColor = Color(0xFFDCD2D2)
             ),
@@ -399,4 +405,18 @@ fun GiftItem(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun PreviewGiftItem() {
+    GiftItem(
+        giftPrice = 49.99f,
+        giftName = "Smartwatch",
+        giftRecipient = "Alex",
+        isPurchased = true,
+        onSeeDetails = {},
+        onCheckItem = {},
+        onLongClick = {},
+    )
 }

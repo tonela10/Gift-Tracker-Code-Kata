@@ -40,12 +40,16 @@ public fun SummaryScreen(
     viewModel: SummaryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    SummaryScreenStateless(uiState = uiState)
+    SummaryScreenStateless(
+        uiState = uiState,
+        onGiftClick = viewModel::updateGift
+    )
 }
 
 @Composable
 public fun SummaryScreenStateless(
-    uiState: SummaryUiState
+    uiState: SummaryUiState,
+    onGiftClick: (Long) -> Unit,
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -159,7 +163,7 @@ public fun SummaryScreenStateless(
                 if (uiState.totalGifts - uiState.purchasedGifts > 0) {
                     NextSteps(
                         pendingGiftsList = uiState.gifts.filter { !it.isPurchased },
-                        onGiftClicked = { /* TODO: Navigate to gift detail */ }
+                        onGiftClicked = onGiftClick
                     )
                 }
             }
@@ -172,6 +176,7 @@ public fun SummaryScreenStateless(
 @Composable
 private fun PreviewSummaryScreen() {
     SummaryScreenStateless(
-        uiState = SummaryUiState()
+        uiState = SummaryUiState(),
+        onGiftClick = {}
     )
 }
