@@ -126,6 +126,9 @@ public fun SummaryScreen(
                     }
                 )
             }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                ExpensePerPerson(gifts = uiState.gifts)
+            }
         }
     }
 }

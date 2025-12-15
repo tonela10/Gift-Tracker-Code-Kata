@@ -9,6 +9,6 @@ data class GiftEntity(
     val id: Long = 0,
     val name: String,
     val person: String,
-    val price: Int,
+    val price: Float,
     val isPurchased: Boolean = false
 )

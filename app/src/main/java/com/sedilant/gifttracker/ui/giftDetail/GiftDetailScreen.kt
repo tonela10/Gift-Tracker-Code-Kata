@@ -49,7 +49,7 @@ import com.sedilant.gifttracker.ui.theme.BackgroundLight
 
 @Composable
 public fun GiftDetailScreen(
-    itemId: String?,
+    itemId: Long?,
     viewModel: GiftDetailViewModel = hiltViewModel(
         creationCallback = { factory: GiftDetailViewModelFactory ->
             factory.create(itemId = itemId)

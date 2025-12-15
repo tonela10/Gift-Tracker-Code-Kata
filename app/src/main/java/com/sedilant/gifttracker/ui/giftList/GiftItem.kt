@@ -52,7 +52,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun GiftItem(
     modifier: Modifier = Modifier,
-    giftPrice: Int,
+    giftPrice: Float,
     giftName: String,
     giftRecipient: String,
     isPurchased: Boolean,

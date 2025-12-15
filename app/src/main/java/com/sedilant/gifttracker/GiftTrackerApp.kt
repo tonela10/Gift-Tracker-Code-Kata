@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 data object HomeScreen : NavKey
 
 @Serializable
-data class GiftDetail(val id: String?) : NavKey
+data class GiftDetail(val id: Long?) : NavKey
 
 @Composable
 fun GiftTrackerApp() {

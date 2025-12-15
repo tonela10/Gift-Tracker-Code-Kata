@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    onOpenDetails: (String?) -> Unit
+    onOpenDetails: (Long?) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 2 })
 

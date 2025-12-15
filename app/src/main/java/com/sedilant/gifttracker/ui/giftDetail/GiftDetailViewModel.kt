@@ -28,7 +28,7 @@ data class GiftDetailUiState(
 
 @HiltViewModel(assistedFactory = GiftDetailViewModelFactory::class)
 class GiftDetailViewModel @AssistedInject constructor(
-    @Assisted private val itemId: String?,
+    @Assisted private val itemId: Long?,
     private val giftRepository: GiftRepository
 ) : ViewModel() {
 
@@ -41,7 +41,7 @@ class GiftDetailViewModel @AssistedInject constructor(
             _uiState.update { it.copy(isEditMode = true) }
         } else {
             // Loading an existing item, fetch details from database
-            loadGiftDetails(itemId.toLongOrNull())
+            loadGiftDetails(itemId)
         }
     }
 
@@ -79,13 +79,13 @@ class GiftDetailViewModel @AssistedInject constructor(
     fun saveGiftDetails() {
         viewModelScope.launch {
             val currentState = _uiState.value
-            val priceValue = currentState.price.toIntOrNull() ?: 0
+            val priceValue = currentState.price.toFloatOrNull() ?: 0
 
             val giftEntity = GiftEntity(
                 id = currentState.giftId ?: 0,
                 name = currentState.gift,
                 person = currentState.person,
-                price = priceValue,
+                price = priceValue.toFloat(),
                 isPurchased = currentState.isPurchased
             )
 
@@ -129,5 +129,5 @@ class GiftDetailViewModel @AssistedInject constructor(
 
 @AssistedFactory
 interface GiftDetailViewModelFactory {
-    fun create(itemId: String?): GiftDetailViewModel
+    fun create(itemId: Long?): GiftDetailViewModel
 }

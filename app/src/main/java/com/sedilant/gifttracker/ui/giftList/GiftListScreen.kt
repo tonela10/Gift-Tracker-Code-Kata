@@ -17,7 +17,7 @@ import com.sedilant.gifttracker.ui.theme.GiftTrackerTheme
 
 @Composable
 public fun GiftListScreen(
-    onOpenDetails: (String?) -> Unit,
+    onOpenDetails: (Long?) -> Unit,
     viewModel: GiftListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -31,7 +31,7 @@ public fun GiftListScreen(
     ) {
         items(uiState.gifts) { gift ->
             GiftItem(
-                onSeeDetails = { onOpenDetails(gift.name) },
+                onSeeDetails = { onOpenDetails(gift.id) },
                 giftPrice = gift.price,
                 giftName = gift.name,
                 giftRecipient = gift.recipient,
@@ -47,8 +47,8 @@ public fun GiftListScreen(
 private fun GiftListScreenPreview() {
     GiftTrackerTheme {
         val gifts = listOf(
-            Gift(0, "Libro de Arte Moderno", "Ana", 25, false),
-            Gift(1, "Bufanda de lana", "Carlos", 30, true)
+            Gift(0, "Libro de Arte Moderno", "Ana", 25f, false),
+            Gift(1, "Bufanda de lana", "Carlos", 30f, true)
         )
 
         LazyColumn(
@@ -76,6 +76,6 @@ data class Gift(
     val id: Long = 0,
     val name: String,
     val recipient: String,
-    val price: Int,
+    val price: Float,
     val isPurchased: Boolean
 )
