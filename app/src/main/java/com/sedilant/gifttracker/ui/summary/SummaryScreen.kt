@@ -146,7 +146,7 @@ public fun SummaryScreenStateless(
                     contentColor = Color(0xFFF9A825),
                     content = {
                         Text(
-                            text = "€${uiState.totalEstimatedCost}",
+                            text = "€${uiState.currentlySpent}",
                             style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black

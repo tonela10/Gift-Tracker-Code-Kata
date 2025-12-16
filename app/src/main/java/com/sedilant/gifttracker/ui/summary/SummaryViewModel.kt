@@ -17,6 +17,7 @@ data class SummaryUiState(
     val purchasedGifts: Int = 0,
     val totalPeople: Int = 0,
     val totalEstimatedCost: Int = 0,
+    val currentlySpent: Int = 0,
     val purchasedPercentage: Float = 0f,
     val gifts: List<GiftEntity> = emptyList(),
 )
@@ -51,6 +52,9 @@ class SummaryViewModel @Inject constructor(
                 } else {
                     0f
                 }
+                val currentlySpent = giftEntities
+                    .filter { it.isPurchased }
+                    .sumOf { it.price.toInt() }
 
                 _uiState.update {
                     it.copy(
@@ -59,6 +63,7 @@ class SummaryViewModel @Inject constructor(
                         totalPeople = totalPeople,
                         totalEstimatedCost = totalEstimatedCost,
                         purchasedPercentage = purchasedPercentage,
+                        currentlySpent = currentlySpent,
                         gifts = giftEntities
                     )
                 }

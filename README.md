@@ -59,55 +59,60 @@ By completing this kata, you will build an app that allows users to:
 
 ---
 
-## 🧩 Tasks to Complete
+# 🧩 Tasks to Complete
 
 <!-- TODO : Modify the tasks -->
 Below is the recommended list of tasks to **progressively complete the app**.
 
+## Create composables
+
 ### 1. 📋 Gift List (`GiftListScreen`)
 
-- Display a list of gifts
-- Each item shows:
-    - Gift name
-    - Person
-    - Status
+- Create a composable to display a gift.
+    - Person Name
+    - Gift Name
     - Price
-- Add list animations (enter / exit)
-  ![img_1.png](img_1.png)
+    - Status, isPurchased?
+    - Category
+
+- Create the Floating Action Button to add a new gift
 
 ---
 
 ### 2. ➕ Add Gift Screen (`GiftDetailScreen`)
 
-- Create FloatingActionButton to open Add Gift screen
-- Animate the FAB to appear only in the Gift List screen
+Create a Gift detail screen to add or edit a gift.
+
 - Navigate to Add Gift Screen
     - If we click on the FAB, we pass null (new gift)
     - If we click on an existing gift, we pass the gift ID
-- Form to create a new gift:
-    - Person Name
-    - Gift Name
-    - Price. TrailingIcon with currency symbol.
-    - Status, isPurchased?
-- Save/Edit button
-- The navigate back button in the top app bar change with a close icon when in Add/Edit mode
+- Create a reusable TextField composable with:
+    - Label
+    - Initial Value
+    - onValueChange
+    - Category
+    - Optional TrailingIcon
+    - Keyboard Options & Actions
+- Add field below the text fields to show if the gift is purchased or not.
+- Create the form with a TopAppBar with and a back button or close button depending if the user is
+  editing
+- Add a save/edit button to change mode.
 
-![img.png](img.png)
 ---
 
 ### 3. 🔍 Summary Screen (`SummaryScreen`)
 
 Display main info about the total of the gifts
-- Create a item which contains a icon, text and @Composable content. We should be able to reuse it and pass the surface and icon color.
-- Create a grid layout with an odd number of items.:
+
+- Create an item which contains an icon, text and @Composable content. We should be able to reuse it
+  and pass the surface and icon color.
+- Create a grid layout with an odd number of items:
     - When we have only one item in a row, it should take the full width.
     - The maximum number of columns is 2 when compact and 3 when expanded.
-  
-  ![img_2.png](img_2.png)
 ---
 
-### 4. ✏️ Circular chart
-
+#### 3.1 ✏️ Circular chart
+- Create a circular chart to show the total expenesses and the expense per person.
 - Reuse the Add Gift form
 - Pre-fill existing data
 - Save changes
@@ -117,8 +122,8 @@ Display main info about the total of the gifts
 
 ---
 
-### 5. Next Steps 
-
+#### 3.2. Next Steps
+- Create a NextSteps section which shows the remaining gifts to buy.
 - Delete from detail screen or swipe action
 - Show confirmation dialog
 
@@ -127,7 +132,12 @@ Display main info about the total of the gifts
 
 ---
 
-### 6. 💫 UI Animations
+## 💫 UI Animations
+- Swipe to delete with animation
+- Animated the save/edit button
+- Animate screen transitions
+- List/ details view.
+### 6. 🎞️ Basic Animations
 
 Suggested ideas:
 
