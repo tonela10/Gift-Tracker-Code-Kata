@@ -261,7 +261,7 @@ fun DotAnimation() {
                     this.alpha = alpha
                 }
                 .background(
-                    color = Color.White,
+                    color = Color.Black,
                     shape = CircleShape
                 )
         )
@@ -283,7 +283,6 @@ fun DotAnimation() {
             )
         }
         alphas.forEach {
-
             Dot(alpha = it.value)
         }
     }
