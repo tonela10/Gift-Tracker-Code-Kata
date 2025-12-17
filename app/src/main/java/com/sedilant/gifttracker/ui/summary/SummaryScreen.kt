@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,12 +39,14 @@ import com.sedilant.gifttracker.R
 
 @Composable
 public fun SummaryScreen(
-    viewModel: SummaryViewModel = hiltViewModel()
+    viewModel: SummaryViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     val uiState by viewModel.uiState.collectAsState()
     SummaryScreenStateless(
         uiState = uiState,
-        onGiftClick = viewModel::updateGift
+        onGiftClick = viewModel::updateGift,
+        contentPadding = contentPadding
     )
 }
 
@@ -50,9 +54,16 @@ public fun SummaryScreen(
 public fun SummaryScreenStateless(
     uiState: SummaryUiState,
     onGiftClick: (Long) -> Unit,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
+    val paddingValues = PaddingValues(
+        top = 12.dp,
+        bottom = contentPadding.calculateBottomPadding() + 12.dp,
+        start = contentPadding.calculateStartPadding(layoutDirection = LocalLayoutDirection.current) + 12.dp,
+        end = contentPadding.calculateEndPadding(LocalLayoutDirection.current) + 12.dp,
+    )
 
     // Determine columns based on screen width
     val columns = when {
@@ -60,112 +71,105 @@ public fun SummaryScreenStateless(
         screenWidth < 840.dp -> 3  // Medium: 3 columns
         else -> 3                  // Large: 3 columns
     }
-
-    Column(
+    LazyVerticalGrid(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+            .fillMaxSize(),
+        columns = GridCells.Fixed(columns),
+        contentPadding = paddingValues,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(columns),
-            contentPadding = PaddingValues(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            // Total gifts card
-            item(span = { GridItemSpan(1) }) {
-                SummaryInfoCard(
-                    icon = Icons.Default.ShoppingCart,
-                    title = stringResource(R.string.total_gifts),
-                    backgroundColor = Color(0xFFFFE4E1),
-                    contentColor = Color(0xFFD32F2F),
-                    content = {
-                        Text(
-                            text = "${uiState.totalGifts}",
-                            style = MaterialTheme.typography.headlineLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
-                        Text(
-                            text = "para ${uiState.totalPeople} personas",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
-                        )
-                    }
-                )
-            }
-
-            // Purchased gifts card
-            item(span = { GridItemSpan(1) }) {
-                SummaryInfoCard(
-                    icon = Icons.Default.CheckCircle,
-                    title = stringResource(R.string.already_bought),
-                    backgroundColor = Color(0xFFE8F5E9),
-                    contentColor = Color(0xFF2E7D32),
-                    content = {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "${uiState.purchasedGifts} / ${uiState.totalGifts}",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Gray
-                                )
-                                Text(
-                                    text = "${(uiState.purchasedPercentage * 100).toInt()}%",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Gray
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(4.dp))
-                            LinearProgressIndicator(
-                                progress = { uiState.purchasedPercentage },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(8.dp)
-                                    .clip(RoundedCornerShape(4.dp)),
-                                color = Color(0xFF2E7D32),
-                                trackColor = Color(0xFFC8E6C9)
-                            )
-                        }
-                    }
-                )
-            }
-
-            // Total estimated card - spans full row on compact (2), single cell on larger screens
-            item(span = { GridItemSpan(if (columns == 2) maxLineSpan else 1) }) {
-                SummaryInfoCard(
-                    icon = Icons.Default.CheckCircle,
-                    title = stringResource(R.string.total_estimated),
-                    backgroundColor = Color(0xFFFFF9C4),
-                    contentColor = Color(0xFFF9A825),
-                    content = {
-                        Text(
-                            text = "€${uiState.totalEstimatedCost}",
-                            style = MaterialTheme.typography.headlineLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
-                    }
-                )
-            }
-
-            // Full-width sections
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                ExpensePerPerson(gifts = uiState.gifts)
-            }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                if (uiState.totalGifts - uiState.purchasedGifts > 0) {
-                    NextSteps(
-                        pendingGiftsList = uiState.gifts.filter { !it.isPurchased },
-                        onGiftClicked = onGiftClick
+        // Total gifts card
+        item(span = { GridItemSpan(1) }) {
+            SummaryInfoCard(
+                icon = Icons.Default.ShoppingCart,
+                title = stringResource(R.string.total_gifts),
+                backgroundColor = Color(0xFFFFE4E1),
+                contentColor = Color(0xFFD32F2F),
+                content = {
+                    Text(
+                        text = "${uiState.totalGifts}",
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Text(
+                        text = "para ${uiState.totalPeople} personas",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
                     )
                 }
+            )
+        }
+
+        // Purchased gifts card
+        item(span = { GridItemSpan(1) }) {
+            SummaryInfoCard(
+                icon = Icons.Default.CheckCircle,
+                title = stringResource(R.string.already_bought),
+                backgroundColor = Color(0xFFE8F5E9),
+                contentColor = Color(0xFF2E7D32),
+                content = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "${uiState.purchasedGifts} / ${uiState.totalGifts}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = "${(uiState.purchasedPercentage * 100).toInt()}%",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Gray
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        LinearProgressIndicator(
+                            progress = { uiState.purchasedPercentage },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(8.dp)
+                                .clip(RoundedCornerShape(4.dp)),
+                            color = Color(0xFF2E7D32),
+                            trackColor = Color(0xFFC8E6C9)
+                        )
+                    }
+                }
+            )
+        }
+
+        // Total estimated card - spans full row on compact (2), single cell on larger screens
+        item(span = { GridItemSpan(if (columns == 2) maxLineSpan else 1) }) {
+            SummaryInfoCard(
+                icon = Icons.Default.CheckCircle,
+                title = stringResource(R.string.total_estimated),
+                backgroundColor = Color(0xFFFFF9C4),
+                contentColor = Color(0xFFF9A825),
+                content = {
+                    Text(
+                        text = "€${uiState.currentlySpent}",
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            )
+        }
+
+        // Full-width sections
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            ExpensePerPerson(gifts = uiState.gifts)
+        }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            if (uiState.totalGifts - uiState.purchasedGifts > 0) {
+                NextSteps(
+                    pendingGiftsList = uiState.gifts.filter { !it.isPurchased },
+                    onGiftClicked = onGiftClick
+                )
             }
         }
     }

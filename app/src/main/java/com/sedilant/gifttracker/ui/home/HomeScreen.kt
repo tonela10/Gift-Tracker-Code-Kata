@@ -77,7 +77,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BackgroundLight)
-                .padding(padding)
+                .padding(top = padding.calculateTopPadding())
         ) {
             // Tabs row
             TopTabs(pagerState = pagerState)
@@ -113,8 +113,8 @@ fun HomeScreen(
                 beyondViewportPageCount = 1
             ) { page ->
                 when (page) {
-                    0 -> GiftListScreen(onOpenDetails = onOpenDetails)
-                    1 -> SummaryScreen()
+                    0 -> GiftListScreen(onOpenDetails = onOpenDetails, contentPadding = padding)
+                    1 -> SummaryScreen(contentPadding = padding)
                 }
             }
         }
