@@ -210,6 +210,7 @@ engaging experience.
 
 ### 7.Swipe to delete with animation
 When the user swipes a gift item to the right, we want to animate the item showing is gonna be deleted.
+https://developer.android.com/develop/ui/compose/touch-input/pointer-input/drag-swipe-fling#swiping
 
 ### EXTRA POINTS: 🤓
 

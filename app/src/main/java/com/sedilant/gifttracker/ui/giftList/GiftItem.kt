@@ -9,7 +9,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,16 +19,19 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,16 +45,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.ExperimentalWearMaterialApi
+import androidx.wear.compose.material.FractionalThreshold
+import androidx.wear.compose.material.rememberSwipeableState
+import androidx.wear.compose.material.swipeable
 import com.sedilant.gifttracker.R
 import com.sedilant.gifttracker.ui.theme.ChartYellow
+import com.sedilant.gifttracker.ui.theme.RedPrimary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
+@OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun GiftItem(
     modifier: Modifier = Modifier,
@@ -60,41 +73,42 @@ fun GiftItem(
     isPurchased: Boolean,
     onSeeDetails: () -> Unit,
     onCheckItem: () -> Unit,
-    onLongClick: () -> Unit,
+    onSwipeRight: () -> Unit,
 ) {
-    // first box animation
+    var screenWidthPx by remember { mutableStateOf(1f) }
+    val swipeableState = rememberSwipeableState(0)
+    val anchors = mapOf(0f to 0, screenWidthPx to 1)
+
+    LaunchedEffect(swipeableState.currentValue) {
+        if (swipeableState.currentValue == 1) {
+            onSwipeRight()
+            swipeableState.animateTo(
+                targetValue = 0,
+                anim = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+            )
+        }
+    }
+
+    // RIBBON ANIMATION BLOCK
     val redBoxSlideProgress = remember { Animatable(0f) }
     val redBoxAlpha = remember { Animatable(1f) }
-
-    // first cinta animation
     val verticalBoxSlideProgress = remember { Animatable(0f) }
     val verticalBoxAlpha = remember { Animatable(0f) }
-
-    // second vertical ribbon animation
     val verticalBoxSlideProgress2 = remember { Animatable(0f) }
     val verticalBoxAlpha2 = remember { Animatable(0f) }
-
-    // third vertical ribbon animation
     val verticalBoxSlideProgress3 = remember { Animatable(0f) }
     val verticalBoxAlpha3 = remember { Animatable(0f) }
-
-
-    // second cinta animation
     val horizontalBoxSlideProgress = remember { Animatable(0f) }
     val horizontalBoxAlpha = remember { Animatable(0f) }
-
-    // ribbon icon animation
     val ribbonAlpha = remember { Animatable(0f) }
     val ribbonScale = remember { Animatable(0f) }
 
     var isFirstComposition by remember { mutableStateOf(true) }
 
-    // Animation sequence
     LaunchedEffect(isPurchased) {
         if (isFirstComposition) {
             isFirstComposition = false
             if (!isPurchased) {
-                // If unchecked on first composition, immediately hide animations
                 redBoxSlideProgress.snapTo(0f)
                 redBoxAlpha.snapTo(0f)
                 verticalBoxAlpha.snapTo(0f)
@@ -103,7 +117,6 @@ fun GiftItem(
         }
 
         if (isPurchased) {
-            // Reset animations
             redBoxSlideProgress.snapTo(0f)
             redBoxAlpha.snapTo(1f)
             verticalBoxSlideProgress.snapTo(0f)
@@ -117,7 +130,6 @@ fun GiftItem(
             ribbonAlpha.snapTo(0f)
             ribbonScale.snapTo(0f)
 
-            // Slide in from left (600ms)
             redBoxSlideProgress.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(durationMillis = 200, easing = EaseIn)
@@ -139,8 +151,6 @@ fun GiftItem(
                 animationSpec = tween(durationMillis = 200, easing = EaseIn)
             )
 
-            // Show ribbon icon with scale animation
-
             ribbonAlpha.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(durationMillis = 300)
@@ -156,7 +166,6 @@ fun GiftItem(
 
             delay(1000)
 
-            // Fade out (500ms)
             launch {
                 redBoxAlpha.animateTo(
                     targetValue = 0f,
@@ -195,7 +204,6 @@ fun GiftItem(
             }
 
         } else {
-            // If unchecked, immediately hide
             redBoxSlideProgress.snapTo(0f)
             redBoxAlpha.snapTo(0f)
             verticalBoxAlpha.snapTo(0f)
@@ -204,19 +212,50 @@ fun GiftItem(
             ribbonScale.snapTo(0f)
         }
     }
+    // END OF THE RIBBON ANIMATION BLOCK
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(16.dp))
+            .onSizeChanged { size ->
+                screenWidthPx = size.width.toFloat()
+            }
     ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .matchParentSize(),
+            color = RedPrimary,
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete",
+                    tint = Color.White
+                )
+            }
+        }
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .combinedClickable(
-                    onClick = onSeeDetails,
-                    onLongClick = onLongClick
-                ),
+                .swipeable(
+                    state = swipeableState,
+                    anchors = anchors,
+                    orientation = Orientation.Horizontal,
+                    enabled = true,
+                    reverseDirection = false,
+                    thresholds = { _, _ -> FractionalThreshold(0.5f) },
+                )
+                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
+                .clickable(onClick = onSeeDetails)
+                .clip(RoundedCornerShape(16.dp)),
             colors = CardDefaults.cardColors(
                 containerColor = Color(0xFFDCD2D2)
             ),
@@ -228,7 +267,6 @@ fun GiftItem(
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Checkbox circle
                 Box(
                     modifier = Modifier
                         .size(42.dp)
@@ -256,7 +294,6 @@ fun GiftItem(
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                // Gift info
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
@@ -273,7 +310,6 @@ fun GiftItem(
                     )
                 }
 
-                // Price
                 Text(
                     text = "$giftPrice €",
                     style = MaterialTheme.typography.titleMedium,
@@ -282,13 +318,12 @@ fun GiftItem(
                 )
             }
         }
-        // Animated overlay using Animatable - constrain all overlays to card size
+
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .clip(RoundedCornerShape(16.dp))
         ) {
-            // Red box
             if (redBoxSlideProgress.value > 0f || redBoxAlpha.value > 0f) {
                 Box(
                     modifier = Modifier
@@ -301,19 +336,17 @@ fun GiftItem(
                 )
             }
 
-
-            // Diagonal ribbon (rotated vertical ribbon) 1
             if (verticalBoxSlideProgress.value > 0f || verticalBoxAlpha.value > 0f) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopCenter) // Change alignment to TopStart
+                        .align(Alignment.TopCenter)
                         .width(16.dp)
                         .fillMaxHeight()
                         .graphicsLayer {
                             translationX = size.width
                             translationY = -15f
                             scaleY = verticalBoxSlideProgress.value * 1.5f
-                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            transformOrigin = TransformOrigin(0.5f, 0f)
                             rotationZ = -40f
                             this.alpha = verticalBoxAlpha.value
                         }
@@ -324,18 +357,18 @@ fun GiftItem(
                         )
                 )
             }
-            // Diagonal ribbon (rotated vertical ribbon) 2
+
             if (verticalBoxSlideProgress2.value > 0f || verticalBoxAlpha2.value > 0f) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopCenter) // Change alignment to TopStart
+                        .align(Alignment.TopCenter)
                         .width(16.dp)
                         .fillMaxHeight()
                         .graphicsLayer {
                             translationX = size.width * 3f
                             translationY = -15f
                             scaleY = verticalBoxSlideProgress2.value * 1.5f
-                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            transformOrigin = TransformOrigin(0.5f, 0f)
                             rotationZ = -40f
                             this.alpha = verticalBoxAlpha2.value
                         }
@@ -346,18 +379,18 @@ fun GiftItem(
                         )
                 )
             }
-            // Diagonal ribbon (rotated vertical ribbon) 3
+
             if (verticalBoxSlideProgress3.value > 0f || verticalBoxAlpha3.value > 0f) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopCenter) // Change alignment to TopStart
+                        .align(Alignment.TopCenter)
                         .width(16.dp)
                         .fillMaxHeight()
                         .graphicsLayer {
                             translationX = size.width * 5f
                             translationY = -15f
                             scaleY = verticalBoxSlideProgress3.value * 1.5f
-                            transformOrigin = TransformOrigin(0.5f, 0f) // Scale from top
+                            transformOrigin = TransformOrigin(0.5f, 0f)
                             rotationZ = -40f
                             this.alpha = verticalBoxAlpha3.value
                         }
@@ -368,7 +401,7 @@ fun GiftItem(
                         )
                 )
             }
-            // Horizontal white ribbon
+
             if (horizontalBoxSlideProgress.value > 0f || horizontalBoxAlpha.value > 0f) {
                 Box(
                     modifier = Modifier
@@ -386,8 +419,7 @@ fun GiftItem(
                         )
                 )
             }
-//
-//            // Center ribbon icon
+
             if (ribbonAlpha.value > 0f) {
                 Image(
                     painter = painterResource(id = R.drawable.ribbon_removebg_preview),
@@ -417,6 +449,6 @@ private fun PreviewGiftItem() {
         isPurchased = true,
         onSeeDetails = {},
         onCheckItem = {},
-        onLongClick = {},
+        onSwipeRight = {}
     )
 }
