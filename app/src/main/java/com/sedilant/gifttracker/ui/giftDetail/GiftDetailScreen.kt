@@ -1,29 +1,18 @@
 package com.sedilant.gifttracker.ui.giftDetail
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Euro
 import androidx.compose.material3.Button
@@ -55,7 +44,7 @@ import com.sedilant.gifttracker.R
 import com.sedilant.gifttracker.ui.theme.BackgroundLight
 
 @Composable
-public fun GiftDetailScreen(
+fun GiftDetailScreen(
     itemId: Long?,
     viewModel: GiftDetailViewModel = hiltViewModel(
         creationCallback = { factory: GiftDetailViewModelFactory ->
@@ -78,7 +67,7 @@ public fun GiftDetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-public fun GiftDetailScreenStateless(
+fun GiftDetailScreenStateless(
     uiState: GiftDetailUiState,
     onToggleEditMode: () -> Unit,
     onSaveGiftDetails: () -> Unit,
@@ -166,10 +155,6 @@ private fun DetailsTopBar(
                         ),
                         fontWeight = FontWeight.Bold
                     )
-                    if (isEditMode) {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        DotAnimation()
-                    }
                 }
             },
             navigationIcon = {
@@ -187,7 +172,7 @@ private fun DetailsTopBar(
                     } else {
                         IconButton(onClick = onNavigateBack) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.Default.ArrowBackIosNew,
                                 contentDescription = stringResource(id = R.string.back_content_description)
                             )
                         }
@@ -244,46 +229,6 @@ private fun DetailsBottomBar(
                 modifier = Modifier.padding(8.dp),
                 fontSize = 16.sp
             )
-        }
-    }
-}
-
-@Composable
-fun DotAnimation() {
-    val infiniteTransition = rememberInfiniteTransition()
-
-    @Composable
-    fun Dot(alpha: Float) {
-        Box(
-            modifier = Modifier
-                .size(8.dp)
-                .graphicsLayer {
-                    this.alpha = alpha
-                }
-                .background(
-                    color = Color.Black,
-                    shape = CircleShape
-                )
-        )
-    }
-
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        val alphas = (0..2).map {
-            infiniteTransition.animateFloat(
-                initialValue = 0f,
-                targetValue = 1f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(
-                        durationMillis = 1000,
-                        delayMillis = 200,
-                        easing = LinearEasing
-                    ),
-                    repeatMode = RepeatMode.Restart
-                )
-            )
-        }
-        alphas.forEach {
-            Dot(alpha = it.value)
         }
     }
 }

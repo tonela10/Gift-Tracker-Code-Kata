@@ -145,8 +145,7 @@ the link:
 - List/ details view.
 - Animate list when appear
 - Que haya un objeto por defecto siempre.
-
-- Borrar la animación de editando ...
+---
 
 ### 1. 🎞️ Gift Item Animations
 
@@ -208,6 +207,9 @@ different panes.
 
 When the gift list appears on the screen, we want to animate the items in the list to create a more
 engaging experience.
+
+### 7.Swipe to delete with animation
+When the user swipes a gift item to the right, we want to animate the item showing is gonna be deleted.
 
 ### EXTRA POINTS: 🤓
 
