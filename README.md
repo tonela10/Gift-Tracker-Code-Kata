@@ -57,6 +57,8 @@ By completing this kata, you will build an app that allows users to:
 8. Handle basic state and navigation
 9. Improve UI/UX with feedback and empty states
 
+# Play with edge to edge??????????
+
 ---
 
 # 🧩 Tasks to Complete
@@ -137,6 +139,10 @@ Display main info about the total of the gifts
 - Animated the save/edit button
 - Animate screen transitions
 - List/ details view.
+- Animate list when appear
+- Que haya un objeto por defecto siempre.
+
+- Borrar la animación de editando ...
 ### 6. 🎞️ Basic Animations
 
 Suggested ideas:
