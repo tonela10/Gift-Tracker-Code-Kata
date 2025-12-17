@@ -111,30 +111,34 @@ Display main info about the total of the gifts
 - Create a grid layout with an odd number of items:
     - When we have only one item in a row, it should take the full width.
     - The maximum number of columns is 2 when compact and 3 when expanded.
+
 ---
 
 #### 3.1 ✏️ Circular chart
-- Create a circular chart to show the total expenesses and the expense per person.
+
+- Create a circular chart to show the total expense and the expense per person.
 - Reuse the Add Gift form
 - Pre-fill existing data
 - Save changes
 
-📌 *Screenshot placeholder:*  
-`<!-- ![Edit Gift Example](./docs/edit_gift_example.png) -->`
-
 ---
 
 #### 3.2. Next Steps
+
 - Create a NextSteps section which shows the remaining gifts to buy.
 - Delete from detail screen or swipe action
 - Show confirmation dialog
 
-📌 *Screenshot placeholder:*  
-`<!-- ![Delete Gift Example](./docs/delete_gift_example.png) -->`
-
 ---
 
 ## 💫 UI Animations
+
+For this part of the kata we will focus on adding animations to improve the user experience.
+All the animations are done with the Compose animation APIs. For more information and help, check
+the link:
+
+- https://developer.android.com/develop/ui/compose/animation/choose-api
+
 - Swipe to delete with animation
 - Animated the save/edit button
 - Animate screen transitions
@@ -143,27 +147,74 @@ Display main info about the total of the gifts
 - Que haya un objeto por defecto siempre.
 
 - Borrar la animación de editando ...
-### 6. 🎞️ Basic Animations
 
-Suggested ideas:
+### 1. 🎞️ Gift Item Animations
 
-- Animated list item insertion/removal
-- Screen transitions
-- Button and form focus animations
+Let’s add some animations to the gift item in the list. I want you to make an animation when the
+user, checks
+the gift as purchased. The item should be animated as if it is being wrapped as a gift.
+
+Here an example of how it could look like:
 
 📌 *Screenshot placeholder:*  
-`<!-- ![Animations Example](./docs/animations_example.gif) -->`
+`<!-- ![Gift Item Animation Example](./docs/gift_item_animation.gif) -->`
 
 ---
 
-### 7. 📱 Adaptive Layout
+### 2. FAB Animation
 
-- Support different screen sizes
-- Use responsive layouts (Row / Column)
-- Optional pane-based layout for tablets
+Now, we only want the FAB to appear when the user is in the Gift List screen. So, let's animate the
+visibility of the FAB,
+when the user is not there and navigate to the SummaryScreen.
 
 📌 *Screenshot placeholder:*  
-`<!-- ![Responsive Layout Example](./docs/responsive_example.png) -->`
+`<!-- ![FAB Animation Example](./docs/fab_animation.gif) -->`
+
+### 3. Save/Edit Button Animation
+
+When the user is adding or editing a gift, we want to animate the Save/Edit button to give feedback
+to the user. So when changing state
+from editing to save we want the button to be small and big, but also we want to change the color of
+the button.
+
+But when the state is changing from save to editing we want the button to do the same but show a
+little loading.
+
+📌 *Screenshot placeholder:*  
+`<!-- ![Save/Edit Button Animation Example](./docs/save_edit_button_animation.gif) -->`
+
+### 4. Screen Transition Animations
+
+When navigating between screens, we want to add some transition animations to improve the user
+experience. For example, when navigating from the Gift List to the Gift Detail screen. Let's see how
+is this done in Navigation 3.
+
+📌 *Screenshot placeholder:*  
+`<!-- ![Screen Transition Animation Example](./docs/screen_transition_animation.gif) -->`
+
+### 5 . List/Details View Animation
+
+When the user selects a gift from the list to view its details, we want to animate the transition
+between the list item and the detail view. This will create a smooth and engaging experience for the
+
+When the user selects a gift from the list ot view its details, and the screen is wide enough to
+show both the list and the details side by side, we want to show both views at the same time in two
+different panes.
+
+📌 *Screenshot placeholder:*  
+`<!-- ![List/Details View Animation Example](./docs/list_details_view_animation.gif) -->`
+
+### 6. List Appearance Animation
+
+When the gift list appears on the screen, we want to animate the items in the list to create a more
+engaging experience.
+
+### EXTRA POINTS: 🤓
+
+It is said that the most brave developers don not stop here. They go further for more animations. If
+you are a brave developer, you can try to add a new animation for the chart in the summary screen.
+For example, you can animate the chart when the data changes, or when the user navigates to the
+summary screen
 
 ---
 
