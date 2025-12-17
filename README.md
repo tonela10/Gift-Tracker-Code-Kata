@@ -139,12 +139,11 @@ the link:
 
 - https://developer.android.com/develop/ui/compose/animation/choose-api
 
-- Swipe to delete with animation
 - Animated the save/edit button
 - Animate screen transitions
 - List/ details view.
 - Animate list when appear
-- Que haya un objeto por defecto siempre.
+- 
 ---
 
 ### 1. 🎞️ Gift Item Animations
