@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +25,7 @@ data class GiftDetailUiState(
     val price: String = "",
     val isPurchased: Boolean = false,
     val isEditMode: Boolean = false,
+    val isLoading: Boolean = false,
     val giftId: Long? = null
 )
 
@@ -79,6 +81,8 @@ class GiftDetailViewModel @AssistedInject constructor(
      */
     fun saveGiftDetails() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            delay(2000)
             val currentState = _uiState.value
             val priceValue = currentState.price.toFloatOrNull() ?: 0
 
@@ -103,7 +107,7 @@ class GiftDetailViewModel @AssistedInject constructor(
                 // Update existing gift
                 giftRepository.updateGift(giftEntity)
             }
-
+            _uiState.update { it.copy(isLoading = false) }
             toggleEditMode()
         }
     }
