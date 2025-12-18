@@ -1,42 +1,34 @@
-### Overview
-
-This repository contains a collaborative Christmas-themed **Android Code Kata** designed to practice
-modern UI development with **Jetpack Compose**.  
-It’s meant to be done with teammates, focusing on building **adaptive layouts** for mobile and
-tablet, adding small **animations**, and exploring the new **Navigation 3** APIs — especially the
-use of **pane-based navigation** for multi-window experiences.
-
-Perfect for a short team session to experiment, learn, and have fun while creating a simple but
-responsive **Gift Tracker** app.
-
 # 🎁 Gift Tracker Code Kata
 
-> **Gift-Tracker-Code-Kata** is a **code kata** designed to practice **Jetpack Compose** and **UI
-animations** in Android by building a simple Christmas Gift Tracker app.
-
-This repository is meant as a **learning and practice exercise**, either solo or with teammates. The
-focus is on:
-
-- Jetpack Compose layouts
-- Animations and transitions
-- Adaptive UI (different screen sizes)
-- Clean UI structure and navigation
+> **Gift-Tracker-Code-Kata** is a **code kata** designed to practice **Jetpack Compose** and **UI animations** in Android by building a simple Christmas Gift Tracker app.
 
 ---
 
 ## 📸 Screenshots
 
-![GiftDetailScreen.jpeg](docs/images/GiftDetailScreen.jpeg)![GiftListScreen.jpeg](docs/images/GiftListScreen.jpeg)![SummaryScreen.jpeg](docs/images/SummaryScreen.jpeg)
+<p align="center">
+  <img src="docs/images/GiftListScreen.jpeg" width="30%" alt="Gift List Screen"/>
+  <img src="docs/images/GiftDetailScreen.jpeg" width="30%" alt="Gift Detail Screen"/>
+  <img src="docs/images/SummaryScreen.jpeg" width="30%" alt="Summary Screen"/>
+</p>
+
+---
+
+## 🎯 Overview
+
+This repository contains a collaborative Christmas-themed **Android Code Kata** designed to practice modern UI development with **Jetpack Compose**.
+
+It's meant to be done with teammates, focusing on building **adaptive layouts** for mobile and tablet, adding small **animations**, and exploring the new **Navigation 3** APIs — especially the use of **pane-based navigation** for multi-window experiences.
+
+Perfect for a short team session to experiment, learn, and have fun while creating a simple but responsive **Gift Tracker** app.
 
 ---
 
 ## 🧠 What is a Code Kata?
 
-A **code kata** is a small programming exercise intended to be repeated and refined to improve
-skills, design decisions, and confidence.
+A **code kata** is a small programming exercise intended to be repeated and refined to improve skills, design decisions, and confidence.
 
-In this kata, the main goal is to **practice Jetpack Compose**, **animations**, and **modern Android
-UI patterns**.
+In this kata, the main goal is to **practice Jetpack Compose**, **animations**, and **modern Android UI patterns**.
 
 ---
 
@@ -44,17 +36,17 @@ UI patterns**.
 
 By completing this kata, you will build an app that allows users to:
 
-1. Display a list of gifts
-2. Add new gifts
-3. View gift details
-4. Edit existing gifts
-5. Delete gifts
-6. Add UI animations and transitions
-7. Create adaptive layouts (phone / tablet)
-8. Handle basic state and navigation
-9. Improve UI/UX with feedback and empty states
-10. A little of the new nav 3 API
-11. Play with edge-to-edge and theming
+1. ✅ Display a list of gifts
+2. ➕ Add new gifts
+3. 👁️ View gift details
+4. ✏️ Edit existing gifts
+5. 🗑️ Delete gifts
+6. 💫 Add UI animations and transitions
+7. 📱 Create adaptive layouts (phone / tablet)
+8. 🔄 Handle basic state and navigation
+9. 🎨 Improve UI/UX with feedback and empty states
+10. 🧭 Explore the new Navigation 3 API
+11. 🖼️ Play with edge-to-edge and theming
 
 ---
 
@@ -62,20 +54,27 @@ By completing this kata, you will build an app that allows users to:
 
 Below is the recommended list of tasks to **progressively complete the app**.
 
-## Create composables
+## Create Composables
 
 ### 1. 📋 Gift List (`GiftListScreen`)
 
-- Create a composable to display a gift.
-    - Person Name
-    - Gift Name
-    - Price
-    - Status, isPurchased?
+#### Create Gift Item Composable
 
-![GiftItem.png](docs/images/GiftItem.png)
+Display a gift with the following information:
+- Person Name
+- Gift Name
+- Price
+- Status (isPurchased?)
 
-- Create the Floating Action Button to add a new gift
-  ![FAB.png](docs/images/FAB.png)
+<p align="center">
+  <img src="docs/images/GiftItem.png" width="60%" alt="Gift Item"/>
+</p>
+
+#### Create Floating Action Button
+
+<p align="center">
+  <img src="docs/images/FAB.png" width="30%" alt="Floating Action Button"/>
+</p>
 
 ---
 
@@ -83,148 +82,198 @@ Below is the recommended list of tasks to **progressively complete the app**.
 
 Create a Gift detail screen to add or edit a gift.
 
-- Navigate to Add Gift Screen
-    - If we click on the FAB, we pass null (new gift)
-    - If we click on an existing gift, we pass the gift ID
-- Create a reusable TextField composable with:
-    - Label
-    - Initial Value
-    - onValueChange
-    - Category
-    - Optional TrailingIcon
-    - Keyboard Options & Actions
-      ![EditTextField.png](docs/images/EditTextField.png)
-- Add field below the text fields to show if the gift is purchased or not.
-  ![GiftStatus.png](docs/images/GiftStatus.png)
-- Create the form with a TopAppBar with and a back button or close button depending if the user is
-  editing
-  ![GiftDetailTopBar.png](docs/images/GiftDetailTopBar.png)
-- Add a save/edit button to change mode.
-  ![SaveButton.png](docs/images/SaveButton.png)![EditButton.png](docs/images/EditButton.png)
+#### Navigation
+- If we click on the FAB → pass `null` (new gift)
+- If we click on an existing gift → pass the gift ID
+
+#### Reusable TextField Component
+
+Create a reusable TextField composable with:
+- Label
+- Initial Value
+- `onValueChange` callback
+- Category
+- Optional TrailingIcon
+- Keyboard Options & Actions
+
+<p align="center">
+  <img src="docs/images/EditTextField.png" width="60%" alt="Edit Text Field"/>
+</p>
+
+#### Gift Status Field
+
+Add field below the text fields to show if the gift is purchased or not.
+
+<p align="center">
+  <img src="docs/images/GiftStatus.png" width="60%" alt="Gift Status"/>
+</p>
+
+#### TopAppBar
+
+Create the form with a TopAppBar and a back button or close button depending if the user is editing.
+
+<p align="center">
+  <img src="docs/images/GiftDetailTopBar.png" width="60%" alt="Gift Detail Top Bar"/>
+</p>
+
+#### Save/Edit Button
+
+Add a save/edit button to change mode.
+
+<p align="center">
+  <img src="docs/images/SaveButton.png" width="40%" alt="Save Button"/>
+  <img src="docs/images/EditButton.png" width="40%" alt="Edit Button"/>
+</p>
 
 ---
 
 ### 3. 🔍 Summary Screen (`SummaryScreen`)
 
-Display main info about the total of the gifts
+Display main info about the total of the gifts.
 
-- Create an item which contains an icon, text and @Composable content. We should be able to reuse it
-  and pass the surface and icon color.
-  ![SummaryItem.png](docs/images/SummaryItem.png)
-- Create a grid layout with an odd number of items:
-    - When we have only one item in a row, it should take the full width.
-    - The maximum number of columns is 2 when compact and 3 when expanded.
-      -Recommended Items:
-    - Total Gifts
-    - Total Expense
-    - Most expensive gift
-    - Least expensive gift
-      ![LazyGrid.png](docs/images/LazyGrid.png)
+#### Reusable Summary Item
+
+Create an item which contains an icon, text and `@Composable` content. We should be able to reuse it and pass the surface and icon color.
+
+<p align="center">
+  <img src="docs/images/SummaryItem.png" width="60%" alt="Summary Item"/>
+</p>
+
+#### Grid Layout
+
+Create a grid layout with an odd number of items:
+- When we have only one item in a row, it should take the full width
+- Maximum number of columns: **2** when compact, **3** when expanded
+
+**Recommended Items:**
+- Total Gifts
+- Total Expense
+- Most expensive gift
+- Least expensive gift
+
+<p align="center">
+  <img src="docs/images/LazyGrid.png" width="80%" alt="Lazy Grid"/>
+</p>
 
 ---
 
-#### 3.1 ✏️ Circular chart
+#### 3.1 📊 Circular Chart
 
-- Create a circular chart to show the total expense and the expense per person.
-- Reuse the Add Gift form
-- Pre-fill existing data
-- Save changes
-  TODO add documentation about how to create a circular chart in compose.
+Create a circular chart to show the total expense and the expense per person.
 
-![ExpensePerPerson.png](docs/images/ExpensePerPerson.png)
+> **TODO:** Add documentation about how to create a circular chart in Compose.
+
+<p align="center">
+  <img src="docs/images/ExpensePerPerson.png" width="60%" alt="Expense Per Person Chart"/>
+</p>
+
 ---
 
-#### 3.2. Next Steps
+#### 3.2 ⏭️ Next Steps Section
 
-- Create a NextSteps section which shows the remaining gifts to buy.
-- Be able to mark the gift as purchased from this section.
-- Show confirmation snackbar when marking as purchased. (TODO)
+Create a NextSteps section which shows the remaining gifts to buy.
+- Be able to mark the gift as purchased from this section
+- Show confirmation snackbar when marking as purchased (TODO)
 
-![NextSteps.png](docs/images/NextSteps.png)
+<p align="center">
+  <img src="docs/images/NextSteps.png" width="80%" alt="Next Steps"/>
+</p>
 
 ---
 
 ## 💫 UI Animations
 
 For this part of the kata we will focus on adding animations to improve the user experience.
-All the animations are done with the Compose animation APIs. For more information and help, check
-the link:
 
-- https://developer.android.com/develop/ui/compose/animation/choose-api
+All the animations are done with the Compose animation APIs. For more information and help, check the link:
+- 📚 [Compose Animation APIs](https://developer.android.com/develop/ui/compose/animation/choose-api)
 
 ---
 
 ### 1. 🎞️ Gift Item Animations
 
-Let’s add some animations to the gift item in the list. I want you to make an animation when the
-user, checks
-the gift as purchased. The item should be animated as if it is being wrapped as a gift.
+Add animations to the gift item in the list when the user checks the gift as purchased. The item should be animated as if it is being **wrapped as a gift**.
 
-Here an example of how it could look like:
+**Example:**
 
-[GiftItem_video.mp4](docs/video/GiftItem_video.mp4)
+https://github.com/user-attachments/assets/GiftItem_video.mp4
 
 ---
 
-### 2. FAB Animation
+### 2. 🎈 FAB Animation
 
-Now, we only want the FAB to appear when the user is in the Gift List screen. So, let's animate the
-visibility of the FAB,
-when the user is not there and navigate to the SummaryScreen.
+The FAB should only appear when the user is in the Gift List screen. Animate the visibility of the FAB when navigating to the SummaryScreen.
 
-[FAB_video.mp4](docs/video/FAB_video.mp4)
-
-### 3. Save/Edit Button Animation
-
-When the user is adding or editing a gift, we want to animate the Save/Edit button to give feedback
-to the user. So when changing state
-from editing to save we want the button to be small and big, but also we want to change the color of
-the button.
-
-But when the state is changing from save to editing we want the button to do the same but show a
-little loading.
-
-📌 *Screenshot placeholder:*  
-`<!-- ![Save/Edit Button Animation Example](./docs/save_edit_button_animation.gif) -->`
-
-### 4. Screen Transition Animations
-
-When navigating between screens, we want to add some transition animations to improve the user
-experience. For example, when navigating from the Gift List to the Gift Detail screen. Let's see how
-is this done in Navigation 3.
-
-[Transition_video.mp4](docs/video/Transition_video.mp4)
-
-### 5 . List/Details View Animation
-
-When the user selects a gift from the list to view its details, we want to animate the transition
-between the list item and the detail view. This will create a smooth and engaging experience for the
-
-When the user selects a gift from the list ot view its details, and the screen is wide enough to
-show both the list and the details side by side, we want to show both views at the same time in two
-different panes.
-
-### 6. List Appearance Animation
-
-When the gift list appears on the screen, we want to animate the items in the list to create a more
-engaging experience.
-
-### 7.Swipe to delete with animation
-
-When the user swipes a gift item to the right, we want to animate the item showing is gonna be
-deleted.
-https://developer.android.com/develop/ui/compose/touch-input/pointer-input/drag-swipe-fling#swiping
-
-[swipeToDelete_video.mp4](docs/video/swipeToDelete_video.mp4)
-
-### EXTRA POINTS: 🤓
-
-It is said that the most brave developers don not stop here. They go further for more animations. If
-you are a brave developer, you can try to add a new animation for the chart in the summary screen.
-For example, you can animate the chart when the data changes, or when the user navigates to the
-summary screen
-
-## Create categories.
+https://github.com/user-attachments/assets/FAB_video.mp4
 
 ---
 
+### 3. 💾 Save/Edit Button Animation
+
+When the user is adding or editing a gift, animate the Save/Edit button to give feedback:
+- **Editing → Save:** Button transitions with size and color change
+- **Save → Editing:** Same transition + show a loading indicator
+
+https://github.com/user-attachments/assets/save_edit_video.mp4
+
+---
+
+### 4. 🔄 Screen Transition Animations
+
+Add transition animations when navigating between screens using Navigation 3.
+
+https://github.com/user-attachments/assets/Transition_video.mp4
+
+---
+
+### 5. 🖼️ List/Details View Animation
+
+When the user selects a gift from the list to view its details:
+- Animate the transition between the list item and the detail view
+- On wide screens, show both views side by side in two different panes
+
+---
+
+### 6. 📜 List Appearance Animation
+
+Animate the items when the gift list appears on the screen to create a more engaging experience.
+
+---
+
+### 7. 🗑️ Swipe to Delete with Animation
+
+When the user swipes a gift item to the right, animate the item showing it's going to be deleted.
+
+📚 [Drag, swipe, and fling](https://developer.android.com/develop/ui/compose/touch-input/pointer-input/drag-swipe-fling#swiping)
+
+https://github.com/user-attachments/assets/swipeToDelete_video.mp4
+
+---
+
+### 🏆 EXTRA POINTS: Advanced Animations 🤓
+
+It is said that the most brave developers do not stop here. They go further for more animations!
+
+If you are a brave developer, try adding a new animation for the chart in the summary screen:
+- Animate the chart when the data changes
+- Animate when the user navigates to the summary screen
+
+---
+
+## 🏷️ Create Categories (TODO)
+
+---
+
+## 📝 License
+
+This project is for educational purposes.
+
+---
+
+## 🤝 Contributing
+
+Feel free to fork this repository and practice on your own, or submit PRs with improvements!
+
+---
+
+**Happy Coding! 🎄✨**
