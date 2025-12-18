@@ -13,9 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.sedilant.gifttracker.ui.theme.ChartGreen
 import com.sedilant.gifttracker.ui.theme.RedPrimary
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AnimatedButton(
     text: String,
@@ -26,8 +28,8 @@ fun AnimatedButton(
     val color by animateColorAsState(
         when {
             isLoading -> Color.Gray
-            isEditMode -> Color(0xFF4CAF50)
-            else -> Color(0xFFC62828)
+            isEditMode -> ChartGreen
+            else -> RedPrimary
         }
     )
 
@@ -63,11 +65,15 @@ fun AnimatedButton(
         ) {
             Crossfade(targetState = isLoading, label = "Content Fade") { loading ->
                 if (loading) {
-                    CircularProgressIndicator(
+                    LoadingIndicator(
                         modifier = Modifier.size(24.dp),
                         color = RedPrimary,
-                        strokeWidth = 2.dp
                     )
+//                    CircularProgressIndicator(
+//                        modifier = Modifier.size(24.dp),
+//                        color = RedPrimary,
+//                        strokeWidth = 2.dp
+//                    )
                 } else {
                     Text(
                         text = text,
