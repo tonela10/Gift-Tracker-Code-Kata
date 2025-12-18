@@ -50,6 +50,16 @@ class GiftListViewModel @Inject constructor(
                         price = entity.price,
                         isPurchased = entity.isPurchased
                     )
+                }.ifEmpty {
+                    listOf(
+                        Gift(
+                            id = -1,
+                            name = "Sample Gift",
+                            recipient = "John Doe",
+                            price = 19.99f,
+                            isPurchased = false
+                        )
+                    )
                 }
                 _uiState.update { it.copy(gifts = gifts) }
             }
