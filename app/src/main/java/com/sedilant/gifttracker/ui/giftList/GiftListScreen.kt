@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.sedilant.gifttracker.ui.theme.GiftTrackerTheme
@@ -45,7 +45,7 @@ public fun GiftListScreen(
             title = { Text(text = "WARNING") },
             text = { Text("Are you sure you want to delete this gift?") },
             confirmButton = {
-                androidx.compose.material3.Button(onClick = {
+                Button(onClick = {
                     selectedGiftId?.let { viewModel.onGiftDelete(it) }
                     selectedGiftId = null
                 }) {
@@ -53,7 +53,7 @@ public fun GiftListScreen(
                 }
             },
             dismissButton = {
-                androidx.compose.material3.Button(onClick = { selectedGiftId = null }) {
+                Button(onClick = { selectedGiftId = null }) {
                     Text("Cancel")
                 }
             }
@@ -74,7 +74,7 @@ public fun GiftListScreen(
                 giftRecipient = gift.recipient,
                 isPurchased = gift.isPurchased,
                 onCheckItem = { viewModel.onGiftChecked(gift) },
-                onLongClick = { selectedGiftId = gift.id },
+                onSwipeRight = { selectedGiftId = gift.id },
             )
         }
     }
@@ -105,7 +105,7 @@ private fun GiftListScreenPreview() {
                     giftRecipient = gift.recipient,
                     isPurchased = gift.isPurchased,
                     onCheckItem = { },
-                    onLongClick = {}
+                    onSwipeRight = { gift.id }
                 )
             }
         }

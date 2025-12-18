@@ -26,10 +26,7 @@ focus is on:
 
 ## 📸 Screenshots
 
-<!-- Add screenshots here showing how the UI should look -->
-<!-- EXAMPLE: -->
-<!-- ![Gift List](./docs/screenshot-giftlist.png) -->
-<!-- ![Add Gift](./docs/screenshot-addgift.png) -->
+![GiftDetailScreen.jpeg](docs/images/GiftDetailScreen.jpeg)![GiftListScreen.jpeg](docs/images/GiftListScreen.jpeg)![SummaryScreen.jpeg](docs/images/SummaryScreen.jpeg)
 
 ---
 
@@ -56,14 +53,13 @@ By completing this kata, you will build an app that allows users to:
 7. Create adaptive layouts (phone / tablet)
 8. Handle basic state and navigation
 9. Improve UI/UX with feedback and empty states
-
-# Play with edge to edge??????????
+10. A little of the new nav 3 API
+11. Play with edge-to-edge and theming
 
 ---
 
 # 🧩 Tasks to Complete
 
-<!-- TODO : Modify the tasks -->
 Below is the recommended list of tasks to **progressively complete the app**.
 
 ## Create composables
@@ -75,9 +71,11 @@ Below is the recommended list of tasks to **progressively complete the app**.
     - Gift Name
     - Price
     - Status, isPurchased?
-    - Category
+
+![GiftItem.png](docs/images/GiftItem.png)
 
 - Create the Floating Action Button to add a new gift
+  ![FAB.png](docs/images/FAB.png)
 
 ---
 
@@ -95,10 +93,14 @@ Create a Gift detail screen to add or edit a gift.
     - Category
     - Optional TrailingIcon
     - Keyboard Options & Actions
+      ![EditTextField.png](docs/images/EditTextField.png)
 - Add field below the text fields to show if the gift is purchased or not.
+  ![GiftStatus.png](docs/images/GiftStatus.png)
 - Create the form with a TopAppBar with and a back button or close button depending if the user is
   editing
+  ![GiftDetailTopBar.png](docs/images/GiftDetailTopBar.png)
 - Add a save/edit button to change mode.
+  ![SaveButton.png](docs/images/SaveButton.png)![EditButton.png](docs/images/EditButton.png)
 
 ---
 
@@ -108,9 +110,16 @@ Display main info about the total of the gifts
 
 - Create an item which contains an icon, text and @Composable content. We should be able to reuse it
   and pass the surface and icon color.
+  ![SummaryItem.png](docs/images/SummaryItem.png)
 - Create a grid layout with an odd number of items:
     - When we have only one item in a row, it should take the full width.
     - The maximum number of columns is 2 when compact and 3 when expanded.
+      -Recommended Items:
+    - Total Gifts
+    - Total Expense
+    - Most expensive gift
+    - Least expensive gift
+      ![LazyGrid.png](docs/images/LazyGrid.png)
 
 ---
 
@@ -120,14 +129,18 @@ Display main info about the total of the gifts
 - Reuse the Add Gift form
 - Pre-fill existing data
 - Save changes
+  TODO add documentation about how to create a circular chart in compose.
 
+![ExpensePerPerson.png](docs/images/ExpensePerPerson.png)
 ---
 
 #### 3.2. Next Steps
 
 - Create a NextSteps section which shows the remaining gifts to buy.
-- Delete from detail screen or swipe action
-- Show confirmation dialog
+- Be able to mark the gift as purchased from this section.
+- Show confirmation snackbar when marking as purchased. (TODO)
+
+![NextSteps.png](docs/images/NextSteps.png)
 
 ---
 
@@ -139,12 +152,6 @@ the link:
 
 - https://developer.android.com/develop/ui/compose/animation/choose-api
 
-- Swipe to delete with animation
-- Animated the save/edit button
-- Animate screen transitions
-- List/ details view.
-- Animate list when appear
-- Que haya un objeto por defecto siempre.
 ---
 
 ### 1. 🎞️ Gift Item Animations
@@ -155,8 +162,7 @@ the gift as purchased. The item should be animated as if it is being wrapped as 
 
 Here an example of how it could look like:
 
-📌 *Screenshot placeholder:*  
-`<!-- ![Gift Item Animation Example](./docs/gift_item_animation.gif) -->`
+[GiftItem_video.mp4](docs/video/GiftItem_video.mp4)
 
 ---
 
@@ -166,8 +172,7 @@ Now, we only want the FAB to appear when the user is in the Gift List screen. So
 visibility of the FAB,
 when the user is not there and navigate to the SummaryScreen.
 
-📌 *Screenshot placeholder:*  
-`<!-- ![FAB Animation Example](./docs/fab_animation.gif) -->`
+[FAB_video.mp4](docs/video/FAB_video.mp4)
 
 ### 3. Save/Edit Button Animation
 
@@ -188,8 +193,7 @@ When navigating between screens, we want to add some transition animations to im
 experience. For example, when navigating from the Gift List to the Gift Detail screen. Let's see how
 is this done in Navigation 3.
 
-📌 *Screenshot placeholder:*  
-`<!-- ![Screen Transition Animation Example](./docs/screen_transition_animation.gif) -->`
+[Transition_video.mp4](docs/video/Transition_video.mp4)
 
 ### 5 . List/Details View Animation
 
@@ -200,16 +204,18 @@ When the user selects a gift from the list ot view its details, and the screen i
 show both the list and the details side by side, we want to show both views at the same time in two
 different panes.
 
-📌 *Screenshot placeholder:*  
-`<!-- ![List/Details View Animation Example](./docs/list_details_view_animation.gif) -->`
-
 ### 6. List Appearance Animation
 
 When the gift list appears on the screen, we want to animate the items in the list to create a more
 engaging experience.
 
 ### 7.Swipe to delete with animation
-When the user swipes a gift item to the right, we want to animate the item showing is gonna be deleted.
+
+When the user swipes a gift item to the right, we want to animate the item showing is gonna be
+deleted.
+https://developer.android.com/develop/ui/compose/touch-input/pointer-input/drag-swipe-fling#swiping
+
+[swipeToDelete_video.mp4](docs/video/swipeToDelete_video.mp4)
 
 ### EXTRA POINTS: 🤓
 
@@ -217,6 +223,8 @@ It is said that the most brave developers don not stop here. They go further for
 you are a brave developer, you can try to add a new animation for the chart in the summary screen.
 For example, you can animate the chart when the data changes, or when the user navigates to the
 summary screen
+
+## Create categories.
 
 ---
 
