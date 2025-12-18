@@ -4,10 +4,21 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sedilant.gifttracker.ui.theme.ChartGreen
 import com.sedilant.gifttracker.ui.theme.RedPrimary
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -66,14 +76,9 @@ fun AnimatedButton(
             Crossfade(targetState = isLoading, label = "Content Fade") { loading ->
                 if (loading) {
                     LoadingIndicator(
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.fillMaxSize(),
                         color = RedPrimary,
                     )
-//                    CircularProgressIndicator(
-//                        modifier = Modifier.size(24.dp),
-//                        color = RedPrimary,
-//                        strokeWidth = 2.dp
-//                    )
                 } else {
                     Text(
                         text = text,
