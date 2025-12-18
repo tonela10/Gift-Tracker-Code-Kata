@@ -140,10 +140,7 @@ the link:
 - https://developer.android.com/develop/ui/compose/animation/choose-api
 
 - Animated the save/edit button
-- Animate screen transitions
-- List/ details view.
 - Animate list when appear
-- 
 ---
 
 ### 1. 🎞️ Gift Item Animations
