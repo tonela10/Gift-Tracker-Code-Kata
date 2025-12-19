@@ -1,10 +1,5 @@
 package com.sedilant.gifttracker.ui.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +14,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -52,25 +43,7 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-            AnimatedVisibility(
-                visible = pagerState.currentPage == 0,
-                enter = slideInHorizontally(
-                    initialOffsetX = { it },
-                    animationSpec = spring(Spring.DampingRatioMediumBouncy)
-                ),
-                exit = slideOutHorizontally(targetOffsetX = { it * 2 })
-            ) {
-                FloatingActionButton(
-                    onClick = { onOpenDetails(null) },
-                    containerColor = Color(0xFFB23A48)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.add_gift),
-                        tint = Color.White
-                    )
-                }
-            }
+            // TODO FAB
         }
     ) { padding ->
         Column(
