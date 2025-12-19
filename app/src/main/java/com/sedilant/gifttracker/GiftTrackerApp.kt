@@ -1,11 +1,6 @@
 package com.sedilant.gifttracker
 
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
-import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -35,8 +30,7 @@ fun GiftTrackerApp() {
     // Create a back stack, specifying the key the app should start with
     val backStack = rememberNavBackStack(HomeScreen)
 
-    // TODO check how to have only one detail screen at the time.
-    val strategy = rememberListDetailSceneStrategy<NavKey>()
+
 
     NavDisplay(
         backStack = backStack,
@@ -45,29 +39,15 @@ fun GiftTrackerApp() {
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
-
-        sceneStrategy = strategy,
-        transitionSpec = {
-            slideInHorizontally(initialOffsetX = { it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { -it })
-        },
-        popTransitionSpec = {
-            slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { it })
-        },
-        predictivePopTransitionSpec = {
-            slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { it })
-        },
         entryProvider = entryProvider {
             entry<HomeScreen>(
-                metadata = ListDetailSceneStrategy.listPane()
+
             ) {
                 // HomeScreen composable
                 HomeScreen(onOpenDetails = { id -> backStack.add(GiftDetail(id)) })
             }
             entry<GiftDetail>(
-                metadata = ListDetailSceneStrategy.detailPane()
+
             ) { key ->
                 // GiftDetailScreen composable
                 GiftDetailScreen(

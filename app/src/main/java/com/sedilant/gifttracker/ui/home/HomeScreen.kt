@@ -1,10 +1,5 @@
 package com.sedilant.gifttracker.ui.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,24 +47,15 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-            AnimatedVisibility(
-                visible = pagerState.currentPage == 0,
-                enter = slideInHorizontally(
-                    initialOffsetX = { it },
-                    animationSpec = spring(Spring.DampingRatioMediumBouncy)
-                ),
-                exit = slideOutHorizontally(targetOffsetX = { it * 2 })
+            FloatingActionButton(
+                onClick = { onOpenDetails(null) },
+                containerColor = Color(0xFFB23A48)
             ) {
-                FloatingActionButton(
-                    onClick = { onOpenDetails(null) },
-                    containerColor = Color(0xFFB23A48)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.add_gift),
-                        tint = Color.White
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add_gift),
+                    tint = Color.White
+                )
             }
         }
     ) { padding ->
